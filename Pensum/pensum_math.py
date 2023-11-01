@@ -1,3 +1,4 @@
+import pickle
 ##MATH
 fundamentos_de_matematicas = {
     'nombre': 'Fundamentos de matemáticas',
