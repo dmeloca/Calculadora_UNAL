@@ -16,10 +16,7 @@ Optativa_comunicacion = {
     'prerrequisito': ' ',
     'tipo': ' ',
 }
-primer_estadistica = {
-    'nombre': 'Primer semestre Estadistica',
-    'children': [fundamentos_de_matematicas, calculo_diferencial, estadistica_descriptiva_y_exploratoria,optativa_comunicacion]
-}
+
 fundamentacion_en_ciencas = {
     'nombre:': ' ',
     'id': ' ',
@@ -28,10 +25,6 @@ fundamentacion_en_ciencas = {
     'obligatoria': ' ',
     'prerrequisito': ' ',
     'tipo': ' ',
-}
-segundo_cc = {
-    'nombre': 'Segundo Semestre ciencias de la computación',
-    'children': [algebra_lineal, calculo_integral, sistemas_numericos, fundamentacion_en_ciencas]
 }
 algebra_matricial ={
     'nombre': 'algebra matricial',
