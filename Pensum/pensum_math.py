@@ -415,6 +415,7 @@ geometria_vectorial_y_analitica = {
     'prerrequisito': 'No requiere',
     'tipo': 'fundamentación'
 }
+math = [fundamentos_de_matematicas, calculo_diferencial_en_una_variable, introduccion_la_teoria_de_conjuntos, algebra_lineal_basica, calculo_integral_en_una_variable, sistemas_numericos, calculo_de_ecuaciones_diferenciales_ordinarias, calculo_vectorial, mecanica_newtoniana, fundamentos_de_electricidad_y_magnetismo, fundamentos_de_oscilaciones_ondas_y_optica, fundamentos_de_mecanica_de_fluidos, funda_fisica_moderna, mecanica_analitica_I, mecanica_analitica_II, introduccion_a_la_optimizacion, modelos_matematicos_1, introduccion_a_la_teoria_de_la_computacion, teoria_de_grafos, procesos_estocasticos, analisis_estocastico, teoria_de_conjuntos_1, teoria_de_modelos_1, epistemologia_e_historia_de_la_matematica, anillos_y_modulos, teoria_de_numeros, ecuaciones_diferenciales_ordinarias, ecuaciones_diferenciales_parciales_1, geometria_diferencial_1, introduccion_al_analisis_combinatorio, analisis_numerico_1, introduccion_al_analisis_real, integracion_y_series, analisis_vectorial, variable_compleja, topologia_general, grupos_y_anillos, algebra_multilineal_y_formas_canonicas, teoria_de_cuerpos, logica_matematica, programacion_y_metodos_numericos, probabilidad, geometria_elemental, geometria_vectorial_y_analitica]
 
 
 with open('pensum_math.pkl', 'wb') as archivo:
