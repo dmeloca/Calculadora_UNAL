@@ -1,10 +1,15 @@
 import unicodedata
 import pickle
 
+carrera1 = ''
+
+
 def strip_accents(s):
-    s = ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
+    s = ''.join(c for c in unicodedata.normalize(
+        'NFD', s) if unicodedata.category(c) != 'Mn')
     s = s.replace(' ', '').lower()
     return s
+
 
 def append_topic(usuario, id, carrera):
     for topic in carrera:
@@ -12,13 +17,15 @@ def append_topic(usuario, id, carrera):
             usuario.append(topic)
             return 0
 
+
 def inscribir_materias(usuario, carrera):
     while True:
         answer = input(f"[*] Ingrese la materia que vió: \n")
         answer1 = strip_accents(answer)
         intento = append_topic(usuario, answer1, carrera)
         if intento != 0:
-            a = input(f"[?] Desea ingresar {answer} (que no está en el listado) (S/N)")
+            a = input(
+                f"[?] Desea ingresar {answer} (que no está en el listado) (S/N)")
             if a == "S" or a == "s":
                 new_m = crear_materias(answer)
                 new_m['id'] = f"{new_m['id']}_{intento}"
@@ -35,10 +42,12 @@ def inscribir_materias(usuario, carrera):
 
     # Después de que el usuario termine de inscribir materias, ingresamos las notas.
     grade(usuario)
-    
+
+
 def crear_materias(nombre):
     id = strip_accents(nombre)
-    codigo = int(input("[?] Ingrese el código de la materia (si no lo conoce ingrese un cero) "))
+    codigo = int(
+        input("[?] Ingrese el código de la materia (si no lo conoce ingrese un cero) "))
     credits = int(input("[?] Ingrese el número de créditos de la materia "))
     obligatoria = 0
     tipo = input("[?] Ingrese el tipo de la materia ")
@@ -51,6 +60,7 @@ def crear_materias(nombre):
         'tipo': tipo
     }
     return tempdict
+
 
 def grade(usuario):
     creditxgrade = 0
@@ -84,6 +94,7 @@ def grade(usuario):
             credits += materia['creditos']
     return creditxgrade, credits
 
+
 def perdida(materia):
     answer = input(f"[?] Perdió la materia {materia['nombre']}? (S/N)")
     if answer.lower() == "s":
@@ -92,6 +103,8 @@ def perdida(materia):
         materia['perdida'] = 0
     else:
         print("[!] Ingrese un valor correcto")
+
+
 def porcentajeAvance(carrera_usuario, carrera):
     creditos_aprobados = 0
     creditostotales = 0
@@ -112,6 +125,7 @@ def porcentajeAvance(carrera_usuario, carrera):
     else:
         print("[!] No tiene creditos para calcular el porcentaje de avance.")
 
+
 def papa(carrera_usuario):
     notas = 0
     creditos = 0
@@ -124,8 +138,12 @@ def papa(carrera_usuario):
     else:
         print("[!] No se han ingresado notas para calcular el PAPA.")
 
+
 def seleccionar_plan():
-    carrera = input("[?] Ingrese qué carrera está cursando: Ciencias de la computación (cc), Estadística (est), Matemáticas (math), Ing. Sistemas (sis): ")
+    carrera = input(
+        "[?] Ingrese qué carrera está cursando: Ciencias de la computación (cc), Estadística (est), Matemáticas (math), Ing. Sistemas (sis): ")
+    global carrera1
+    carrera1 = carrera
     if carrera.lower() == 'cc':
         with open('pensum_cc.pkl', 'rb') as archivo:
             cc = pickle.load(archivo)
@@ -143,12 +161,14 @@ def seleccionar_plan():
     else:
         print("[!] Carrera no encontrada")
 
+
 def main():
     usuario = []
     carrera = seleccionar_plan()
     inscribir_materias(usuario, carrera)
-    porcentajeAvance(usuario, 'cc')
+    porcentajeAvance(usuario, carrera1)
     papa(usuario)
+
 
 if __name__ == "__main__":
     main()
