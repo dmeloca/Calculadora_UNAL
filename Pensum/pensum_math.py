@@ -1,5 +1,194 @@
 import pickle
 ##MATH
+fundamentos_de_matematicas = {
+    'nombre': 'Fundamentos de matemáticas',
+    'id': 'fundamentosdematematicas',
+    'codigo': 2015168,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '1000001 Matemáticas básicas',
+    'tipo': 'fundamentación'
+}
+
+calculo_diferencial_en_una_variable = {
+    'nombre': 'Cálculo diferencial en una variable',
+    'id': 'calculodiferencialenunavariable',
+    'codigo': 2016377,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '1000001 Matemáticas básicas',
+    'tipo': 'fundamentación'
+}
+
+introduccion_la_teoria_de_conjuntos = {
+    'nombre': 'Introducción a la Teoría de Conjuntos',
+    'id': 'introduccionalateoriadeconjuntos',
+    'codigo': 2025819,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '2015168 Fundamentos de matemáticas',
+    'tipo': 'fundamentación'
+}
+
+algebra_lineal_basica = {
+    'nombre': 'Álgebra lineal básica',
+    'id': 'algebralinealbasica',
+    'codigo': 2015555,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '1000001 Matemáticas básicas',
+    'tipo': 'fundamentación'
+}
+
+calculo_integral_en_una_variable = {
+    'nombre': 'Cálculo integral en una variable',
+    'id': 'calculointegralenunavariable',
+    'codigo': 2015556,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '2016377 Cálculo diferencial en una variable',
+    'tipo': 'fundamentación'
+}
+
+sistemas_numericos = {
+    'nombre': 'Sistemas numéricos',
+    'id': 'sistemasnumericos',
+    'codigo': 2015181,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '2015168 Fundamentos de matemáticas',
+    'tipo': 'fundamentación'
+}
+
+calculo_de_ecuaciones_diferenciales_ordinarias = {
+    'nombre': 'Cálculo de ecuaciones diferenciales ordinarias',
+    'id': 'calculodeecuacionesdiferencialesordinarias',
+    'codigo': 2016342,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '2015556 Cálculo integral en una variable',
+    'tipo': 'fundamentación'
+}
+
+calculo_vectorial = {
+    'nombre': 'Cálculo vectorial',
+    'id': 'calculovectorial',
+    'codigo': 2015162,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '2015556 Cálculo integral en una variable',
+    'tipo': 'fundamentación'
+}
+
+mecanica_newtoniana = {
+    'nombre': 'Mecánica Newtoniana',
+    'id': 'mecanicanewtoniana',
+    'codigo': 2015176,
+    'creditos': 4,
+    'obligatoria': 1,
+    'prerrequisito': '2016377 Cálculo diferencial en una variable',
+    'tipo': 'fundamentación'
+}
+
+fundamentos_de_electricidad_y_magnetismo = {
+    'nombre': 'Fundamentos de electricidad y magnetismo',
+    'id': 'fundamentosdeelectricidadymagnetismo',
+    'codigo': 1000017,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': '2016377 Cálculo diferencial en una variable',
+    'tipo': 'fundamentación'
+}
+
+fundamentos_de_oscilaciones_ondas_y_optica = {
+    'nombre': 'Fundamentos de oscilaciones, ondas y óptica',
+    'id': 'fundamentosdeoscilacionesondasyoptica',
+    'codigo': 2015170,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': '2016377 Cálculo diferencial en una variable',
+    'tipo': 'fundamentación'
+}
+
+fundamentos_de_mecanica_de_fluidos = {
+    'nombre': 'Fundamentos de mecánica de fluidos',
+    'id': 'fundamentosdemecanicadefluidos',
+    'codigo': 2015169,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': '2016377 Cálculo diferencial en una variable',
+    'tipo': 'fundamentación'
+}
+
+funda_fisica_moderna = {
+    'nombre': 'Fundamentos de física moderna',
+    'id': 'fundamentosdefisicamoderna',
+    'codigo': 2015167,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': '2016377 Cálculo diferencial en una variable',
+    'tipo': 'fundamentación'
+}
+
+mecanica_analitica_I = {
+    'nombre': 'Mecánica analitica I',
+    'id': 'mecanicaanaliticaI',
+    'codigo': 2016679,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': '2015176 Mecánica Newtoniana',
+    'tipo': 'fundamentación'
+}
+
+mecanica_analitica_II = {
+    'nombre': 'Mecánica analitica II',
+    'id': 'mecanicaanaliticaII',
+    'codigo': 2016677,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': '2016679 Mecánica analitica I',
+    'tipo': 'fundamentación'
+}
+
+introduccion_a_la_optimizacion = {
+    'nombre': 'Introducción a la optimización',
+    'id': 'introduccionalaoptimizacion',
+    'codigo': 2015173,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': '2015555 Álgebra lineal básica',
+    'tipo': 'disciplinar'
+}
+
+modelos_matematicos_1 = {
+    'nombre': 'Modelos matemáticos 1',
+    'id': 'modelosmatematicos1',
+    'codigo': 2019082,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': '2016342 Cálculo de ecuaciones diferenciales ordinarias',
+    'tipo': 'disciplinar'
+}
+
+introduccion_a_la_teoria_de_la_computacion = {
+    'nombre': 'Introducción a la teoría de la computación',
+    'id': 'introduccionalateoriadelacomputacion',
+    'codigo': 2015174,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': '2025819 Introducción a la Teoría de Conjuntos',
+    'tipo': 'disciplinar'
+}
+
+teoria_de_grafos = {
+    'nombre': 'Teoría de grafos',
+    'id': 'teoriadegrafos',
+    'codigo': 2015184,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': '2025819 Introducción a la Teoría de Conjuntos',
+    'tipo': 'disciplinar'
+}
 procesos_estocasticos = {
     'nombre': 'Procesos estocásticos',
     'id': 'procesosestocasticos',
