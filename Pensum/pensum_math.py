@@ -8,7 +8,7 @@ fundamentos_de_matematicas = {
     'obligatoria': 1,
     'prerrequisito': '1000001 Matemáticas básicas',
     'tipo': 'fundamentación'
-},
+}
 calculo_diferencial_en_una_variable = {
     'nombre': 'Cálculo diferencial en una variable',
     'id': 'calculodiferencialenunavariable',
@@ -17,7 +17,7 @@ calculo_diferencial_en_una_variable = {
     'obligatoria': 1,
     'prerrequisito': '1000001 Matemáticas básicas',
     'tipo': 'fundamentación'
-},
+}
 introduccion_la_teoria_de_conjuntos = {
     'nombre': 'Introducción a la Teoría de Conjuntos',
     'id': 'introduccionalateoriadeconjuntos',
@@ -26,7 +26,7 @@ introduccion_la_teoria_de_conjuntos = {
     'obligatoria': 1,
     'prerrequisito': '2015168 Fundamentos de matemáticas',
     'tipo': 'fundamentación'
-},
+}
 algebra_lineal_basica = {
     'nombre': 'Álgebra lineal básica',
     'id': 'algebralinealbasica',
@@ -35,7 +35,7 @@ algebra_lineal_basica = {
     'obligatoria': 1,
     'prerrequisito': '1000001 Matemáticas básicas',
     'tipo': 'fundamentación'
-},
+}
 calculo_integral_en_una_variable = {
     'nombre': 'Cálculo integral en una variable',
     'id': 'calculointegralenunavariable',
@@ -44,7 +44,7 @@ calculo_integral_en_una_variable = {
     'obligatoria': 1,
     'prerrequisito': '2016377 Cálculo diferencial en una variable',
     'tipo': 'fundamentación'
-},
+}
 sistemas_numericos = {
     'nombre': 'Sistemas numéricos',
     'id': 'sistemasnumericos',
@@ -53,7 +53,7 @@ sistemas_numericos = {
     'obligatoria': 1,
     'prerrequisito': '2015168 Fundamentos de matemáticas',
     'tipo': 'fundamentación'
-},
+}
 calculo_de_ecuaciones_diferenciales_ordinarias = {
     'nombre': 'Cálculo de ecuaciones diferenciales ordinarias',
     'id': 'calculodeecuacionesdiferencialesordinarias',
@@ -62,7 +62,7 @@ calculo_de_ecuaciones_diferenciales_ordinarias = {
     'obligatoria': 1,
     'prerrequisito': '2015556 Cálculo integral en una variable',
     'tipo': 'fundamentación'
-},
+}
 calculo_vectorial = {
     'nombre': 'Cálculo vectorial',
     'id': 'calculovectorial',
