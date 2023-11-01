@@ -1,3 +1,4 @@
+import pickle
 Estadistica_descriptiva_y_explorativa = {
     'nombre': 'estadistica descriptiva y exploratoria',
     'id': 'estadisticadescriptivayexploratoria',
