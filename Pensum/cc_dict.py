@@ -23,10 +23,6 @@ introduccion_ciencias_computacion = {
     'obligatoria': 1,
     'tipo': 'disciplinar'
     }
-primer_cc = {
-    'nombre': 'Primer semestre Ciencias de la computación',
-    'children': [fundamentos_de_matematicas, calculo_diferencial, introduccion_ciencias_computacion]
-}
 ##II
 algebra_lineal = {
     'nombre': 'Algebra lineal básica',
@@ -60,10 +56,7 @@ programacion_orientada = {
     'obligatoria': 1,
     'tipo': 'fundamentación'
     }
-segundo_cc = {
-    'nombre': 'Segundo Semestre ciencias de la computación',
-    'children': [algebra_lineal, calculo_integral, sistemas_numericos, programacion_orientada]
-}
+
 ##III
 intro_conjuntos = {
     'nombre': 'Introducción teoría de conjuntos',
@@ -97,10 +90,7 @@ estructura_datos = {
     'obligatoria': 1,
     'tipo': 'fundamentación'
     }
-tercer_cc = {
-    'nombre':'Tercer Semestre ciencias de la computación',
-    'children': [intro_conjuntos, calculo_vectorial, probabilidad, estructura_datos]
-}
+
 ##IV
 introduccion_analisis_real = {
     'nombre': 'introducción al análisis real',
@@ -126,10 +116,7 @@ algoritmos = {
     'obligatoria': 1,
     'tipo':'Disciplinar'
 }
-cuarto_cc = {
-    'nombre':'Cuarto Semestre Ciencias de la computación',
-     'children': [introduccion_analisis_real, ecuaciones_diferenciales, algoritmos]
-}
+
 ##V
 algebra_abstracta = {
     'nombre': 'Algebra abstracta y computacional',
@@ -155,10 +142,7 @@ elementos_computador = {
     'obligatoria': 1,
     'tipo':'Disciplinar'
 }
-quinto_cc = {
-    'nombre':'Quinto Semestre Ciencias de la computación',
-     'children': [algebra_abstracta, intro_teoria_computacion, elementos_computador]
-}
+
 sistemas_operativos = {
     'nombre': 'Sistemas operativos',
     'id': 'sistemasoperativos',
@@ -167,10 +151,7 @@ sistemas_operativos = {
     'obligatoria': 1,
     'tipo':'Disciplinar'
 }
-sexto_cc = {
-    'nombre':'Sexto Semestre Ciencias de la computación',
-     'children': [sistemas_operativos]
-}
+
 ##VII
 analisis_numerico_1 = {
     'nombre': 'Análisis numérico I',
@@ -179,8 +160,4 @@ analisis_numerico_1 = {
     'créditos': 4,
     'obligatoria': 1,
     'tipo':'Disciplinar'
-}
-septimo_cc = {
-    'nombre':'Séptimo Semestre Ciencias de la computación',
-     'children': [analisis_numerico_1]
 }
