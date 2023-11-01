@@ -254,9 +254,207 @@ optimizacion = {
     'tipo': 'disciplinar'
 }
 
+introduccion_al_modelamiento_matematico = {
+    'nombre': 'Introducción al modelamiento matemático',
+    'id': 'introduccionalmodelamientomatematico',
+    'codigo': 2027630,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+introduccion_a_la_criptografia_y_a_la_teoria_de_informacion = {
+    'nombre': 'Introducción a la criptografía y a la teoría de información',
+    'id': 'introduccionalacriptografiayalateoríadeinformación',
+'codigo': 2027311,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+teoria_de_la_codificacion = {
+    'nombre': 'Teoría de la codificación',
+    'id': 'teoriadelacodificacion',
+    'codigo': 2027313,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+criptografia = {
+    'nombre': 'Criptografía',
+    'id': 'criptografia',
+    'codigo': 2027310,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+arquitectura_de_computadores = {
+    'nombre': 'Arquitectura de computadores',
+    'id': 'arquitecturadecomputadores',
+    'codigo': 2016697,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+compiladores = {
+    'nombre': 'Compiladores',
+    'id': 'compiladores',
+    'codigo': 2027642,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+teoria_de_lenguajes_formales = {
+    'nombre': 'Teoría de lenguajes formales',
+    'id': 'teoriadelenguajesformales',
+    'codigo': 2027628,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+logica_computacional = {
+    'nombre': 'Lógica computacional',
+    'id': 'logicacomputacional',
+    'codigo': 2027629,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+teoria_de_la_recursion = {
+    'nombre': 'Teoría de la recursión',
+    'id': 'teoriadelarecursion',
+    'codigo': 2019267,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+informatica_aplicada = {
+    'nombre': 'Informática aplicada',
+    'id': 'informaticaaplicada',
+    'codigo': 2021834,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+mundos_virtuales = {
+    'nombre': 'Mundos virtuales',
+    'id': 'mundosvirtuales',
+    'codigo': 2024065,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+fundamentos_de_fisica = {
+    'nombre': 'Fundamentos de física',
+    'id': 'fundamentosdefisica',
+    'codigo': 2022689,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'fundamentación'
+}
+
+fundamentos_de_fisica_teorica = {
+    'nombre': 'Fundamentos de física teórica',
+    'id': 'fundamentosdefisicateorica',
+    'codigo': 2016651,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'fundamentación'
+}
+
+mecanica_newtoniana = {
+    'nombre': 'Mecánica newtoniana',
+    'id': 'mecanicanewtoniana',
+    'codigo': 2015176,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'fundamentación'
+}
+
+probabilidad_y_estadistica_fundamental = {
+    'nombre': 'Probabilidad y estadística fundamental',
+    'id': 'probabilidadyestadisticafundamental',
+    'codigo': 1000013,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'fundamentación'
+}
+
+biologia_molecular_y_celular = {
+    'nombre': 'Biología molecular y celular',
+    'id': 'biologiamolecularycelular',
+    'codigo': 1000010,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'fundamentación'
+}
+
+quimica_basica = {
+    'nombre': 'Química básica',
+    'id': 'quimicabasica',
+    'codigo': 1000041,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'fundamentación'
+}
+
+grupos_y_anillos = {
+    'nombre': 'Grupos y anillos',
+    'id': 'gruposyanillos',
+    'codigo': 2015152,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+introduccion_al_analisis_combinatorio = {
+    'nombre': 'Introducción al análisis combinatorio',
+    'id': 'introduccionalanalisiscombinatorio',
+    'codigo': 2027312,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+teoria_de_grafos = {
+    'nombre': 'Teoría de grafos',
+    'id': 'teoriadegrafos',
+    'codigo': 2015184,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo':'disciplinar'
+}
 
 cc = [fundamentos_de_matematicas, calculo_diferencial, introduccion_ciencias_computacion, algebra_lineal,calculo_integral,sistemas_numericos,programacion_orientada,intro_conjuntos,calculo_vectorial,probabilidad,estructura_datos,introduccion_analisis_real,ecuaciones_diferenciales,algoritmos,algebra_abstracta,intro_teoria_computacion,elementos_computador,sistemas_operativos,analisis_numerico_1,analisis_de_bases_de_datos, introduccion_a_la_biologia_computacional, introduccion_a_la_inteligencia_artificial, analisis_forense_digital, fisica_computacional, introduccion_al_aprendizaje_de_maquina, finanzas_computacionales, ecuaciones_en_diferencias_finitas_y_sistemas_dinamicos, introduccion_a_la_optimizacion, optimizacion, introduccion_al_modelamiento_matematico, introduccion_a_la_criptografia_y_a_la_teoria_de_informacion, teoria_de_la_codificacion, criptografia, arquitectura_de_computadores, compiladores, teoria_de_lenguajes_formales, logica_computacional, teoria_de_la_recursion, informatica_aplicada, mundos_virtuales, fundamentos_de_fisica, fundamentos_de_fisica_teorica, mecanica_newtoniana, probabilidad_y_estadistica_fundamental, biologia_molecular_y_celular, quimica_basica, grupos_y_anillos, introduccion_al_analisis_combinatorio, teoria_de_grafos]
 
 with open('pensum_cc.pkl', 'wb') as archivo:
     pickle.dump(cc, archivo)
-
