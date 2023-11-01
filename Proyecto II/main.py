@@ -92,6 +92,25 @@ def perdida(materia):
         materia['perdida'] = 0
     else:
         print("[!] Ingrese un valor correcto")
+def porcentajeAvance(carrera_usuario, carrera):
+    creditos_aprobados = 0
+    creditostotales = 0
+    if carrera == 'cc':
+        creditostotales = 139
+    elif carrera == 'est':
+        creditostotales = 132
+    elif carrera == 'math':
+        creditostotales = 131
+    elif carrera == 'sis':
+        creditostotales = 178
+    for materia in carrera_usuario:
+        if 'nota' in materia and materia['nota'] >= 3:
+            creditos_aprobados += materia['creditos']
+    if creditos_aprobados > 0:
+        print(
+            f"[!] Su porcentaje de avance es de: {(creditos_aprobados/creditostotales)*100}%")
+    else:
+        print("[!] No tiene creditos para calcular el porcentaje de avance.")
 
 def papa(carrera_usuario):
     notas = 0
@@ -128,6 +147,7 @@ def main():
     usuario = []
     carrera = seleccionar_plan()
     inscribir_materias(usuario, carrera)
+    porcentajeAvance(usuario, 'cc')
     papa(usuario)
 
 if __name__ == "__main__":
