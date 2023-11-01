@@ -226,7 +226,7 @@ probabilidad = {
     'codigo': 2015178,
     'creditos': 4,
     'obligatoria': 1,
-    'prerrequisito': '201
+    'prerrequisito': '201',
     'tipo':'fundamentacion'
 }
 geometria_elemental = {
