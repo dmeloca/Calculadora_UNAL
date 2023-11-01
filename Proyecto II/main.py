@@ -55,12 +55,16 @@ def crear_materias(nombre):
 def grade(usuario):
     creditxgrade = 0
     credits = 0
-    for materia in usuario:
+    # print('usuario', usuario)
+    usuariosolomaterias = usuario.copy()
+    for materia in usuariosolomaterias:
         perdida(materia)
         if materia['perdida'] == 1:
-            intentos = int(input(f"[?] Cuantas veces vio {materia['nombre']}: "))
+            intentos = int(
+                input(f"[?] Cuantas veces vio {materia['nombre']}: "))
             for a in range(intentos):
-                nota = float(input(f"[?] Ingrese la nota que obtuvo en {materia['nombre']} (intento {a+1}): "))
+                nota = float(input(
+                    f"[?] Ingrese la nota que obtuvo en {materia['nombre']} (intento {a+1}): "))
                 copia = materia.copy()
                 intento = str(a)
                 copia['id'] += intento
@@ -70,13 +74,14 @@ def grade(usuario):
                 creditxgrade += copia['ponderación']
                 credits += copia['creditos']
             usuario.remove(materia)
+            # print('usuario', usuario)
         else:
-            nota = float(input(f"[?] Ingrese la nota que obtuvo en {materia['nombre']}: "))
+            nota = float(
+                input(f"[?] Ingrese la nota que obtuvo en {materia['nombre']}: "))
             materia['nota'] = nota
             materia["ponderación"] = nota * materia['creditos']
             creditxgrade += materia['ponderación']
             credits += materia['creditos']
-
     return creditxgrade, credits
 
 def perdida(materia):
