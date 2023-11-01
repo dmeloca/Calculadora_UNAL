@@ -55,7 +55,6 @@ def crear_materias(nombre):
 def grade(usuario):
     creditxgrade = 0
     credits = 0
-    print(usuario)
     for materia in usuario:
         perdida(materia)
         if materia['perdida'] == 1:
@@ -71,7 +70,6 @@ def grade(usuario):
                 creditxgrade += copia['ponderación']
                 credits += copia['creditos']
             usuario.remove(materia)
-            break
         else:
             nota = float(input(f"[?] Ingrese la nota que obtuvo en {materia['nombre']}: "))
             materia['nota'] = nota
@@ -113,7 +111,9 @@ def seleccionar_plan():
             est = pickle.load(archivo)
         return est
     elif carrera.lower() == 'math':
-        return 0
+        with open('pensum_math.pkl', 'rb') as archivo:
+            math = pickle.load(archivo)
+        return math
     elif carrera.lower() == 'sis':
         return 0
     else:
@@ -124,7 +124,6 @@ def main():
     carrera = seleccionar_plan()
     inscribir_materias(usuario, carrera)
     papa(usuario)
-    print(usuario)
 
 if __name__ == "__main__":
     main()
