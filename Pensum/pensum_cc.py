@@ -153,10 +153,109 @@ analisis_numerico_1 = {
     'obligatoria': 1,
     'tipo':'Disciplinar'
 }
+# materias no obligatorias
+analisis_de_bases_de_datos = {
+    'nombre': 'Análisis de bases de datos',
+    'id': 'analisisdebasesdedatos',
+    'codigo': 2027641,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+introduccion_a_la_biologia_computacional = {
+    'nombre': 'Introducción a la biología computacional',
+    'id': 'introduccionalabiologiacomputacional',
+    'codigo': 2025196,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+introduccion_a_la_inteligencia_artificial = {
+    'nombre': 'Introducción a la inteligencia artificial',
+    'id': 'introduccionalainteligenciaartificial',
+    'codigo': 2027631,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+analisis_forense_digital = {
+    'nombre': 'Análisis forense digital',
+    'id': 'analisisforensedigital',
+    'codigo': 2027309,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+fisica_computacional = {
+    'nombre': 'Física computacional',
+    'id': 'fisicacomputacional',
+    'codigo': 2027632,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+introduccion_al_aprendizaje_de_maquina = {
+    'nombre': 'Introducción al aprendizaje de máquina',
+    'id': 'introduccionalaprendizajedemaquina',
+    'codigo': 2027643,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+finanzas_computacionales = {
+    'nombre': 'Finanzas computacionales',
+    'id': 'finanzascomputacionales',
+    'codigo': 2016740,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+ecuaciones_en_diferencias_finitas_y_sistemas_dinamicos = {
+    'nombre': 'Ecuaciones en diferencias finitas y sistemas dinámicos',
+    'id': 'ecuacionesendiferenciasfinitasysistemasdinamicos',
+    'codigo': 2026519,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+introduccion_a_la_optimizacion = {
+    'nombre': 'Introducción a la optimización',
+    'id': 'introduccionalaoptimizacion',
+    'codigo': 2015173,
+    'creditos': 4,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
+
+optimizacion = {
+    'nombre': 'Optimización',
+    'id': 'optimizacion',
+    'codigo': 2025971,
+    'creditos': 3,
+    'obligatoria': 0,
+    'prerrequisito': 'No requiere',
+    'tipo': 'disciplinar'
+}
 
 
-
-cc = [fundamentos_de_matematicas, calculo_diferencial, introduccion_ciencias_computacion, algebra_lineal,calculo_integral,sistemas_numericos,programacion_orientada,intro_conjuntos,calculo_vectorial,probabilidad,estructura_datos,introduccion_analisis_real,ecuaciones_diferenciales,algoritmos,algebra_abstracta,intro_teoria_computacion,elementos_computador,sistemas_operativos,analisis_numerico_1]
+cc = [fundamentos_de_matematicas, calculo_diferencial, introduccion_ciencias_computacion, algebra_lineal,calculo_integral,sistemas_numericos,programacion_orientada,intro_conjuntos,calculo_vectorial,probabilidad,estructura_datos,introduccion_analisis_real,ecuaciones_diferenciales,algoritmos,algebra_abstracta,intro_teoria_computacion,elementos_computador,sistemas_operativos,analisis_numerico_1,analisis_de_bases_de_datos, introduccion_a_la_biologia_computacional, introduccion_a_la_inteligencia_artificial, analisis_forense_digital, fisica_computacional, introduccion_al_aprendizaje_de_maquina, finanzas_computacionales, ecuaciones_en_diferencias_finitas_y_sistemas_dinamicos, introduccion_a_la_optimizacion, optimizacion, introduccion_al_modelamiento_matematico, introduccion_a_la_criptografia_y_a_la_teoria_de_informacion, teoria_de_la_codificacion, criptografia, arquitectura_de_computadores, compiladores, teoria_de_lenguajes_formales, logica_computacional, teoria_de_la_recursion, informatica_aplicada, mundos_virtuales, fundamentos_de_fisica, fundamentos_de_fisica_teorica, mecanica_newtoniana, probabilidad_y_estadistica_fundamental, biologia_molecular_y_celular, quimica_basica, grupos_y_anillos, introduccion_al_analisis_combinatorio, teoria_de_grafos]
 
 with open('pensum_cc.pkl', 'wb') as archivo:
     pickle.dump(cc, archivo)
