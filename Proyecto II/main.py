@@ -1,7 +1,8 @@
 import unicodedata
 import pickle
 
-carrera1 = ''
+carreraNombre = ''
+materiasAprobadas = []
 
 
 def strip_accents(s):
@@ -65,6 +66,7 @@ def crear_materias(nombre):
 def grade(usuario):
     creditxgrade = 0
     credits = 0
+    global materiasAprobadas
     # print('usuario', usuario)
     usuariosolomaterias = usuario.copy()
     for materia in usuariosolomaterias:
@@ -83,15 +85,21 @@ def grade(usuario):
                 usuario.append(copia)
                 creditxgrade += copia['ponderación']
                 credits += copia['creditos']
+                if nota >= 3:
+                    materiasAprobadas.append(
+                        {'id': materia['id'], 'creditos': materia['creditos']})
             usuario.remove(materia)
             # print('usuario', usuario)
         else:
             nota = float(
                 input(f"[?] Ingrese la nota que obtuvo en {materia['nombre']}: "))
+            materiasAprobadas.append(
+                {'id': materia['id'], 'creditos': materia['creditos']})
             materia['nota'] = nota
             materia["ponderación"] = nota * materia['creditos']
             creditxgrade += materia['ponderación']
             credits += materia['creditos']
+    print('materiasAprobadas', materiasAprobadas)
     return creditxgrade, credits
 
 
@@ -105,7 +113,7 @@ def perdida(materia):
         print("[!] Ingrese un valor correcto")
 
 
-def porcentajeAvance(carrera_usuario, carrera):
+def porcentajeAvance(materiasAprobadas, carrera):
     creditos_aprobados = 0
     creditostotales = 0
     if carrera == 'cc':
@@ -116,14 +124,20 @@ def porcentajeAvance(carrera_usuario, carrera):
         creditostotales = 131
     elif carrera == 'sis':
         creditostotales = 178
-    for materia in carrera_usuario:
-        if 'nota' in materia and materia['nota'] >= 3:
-            creditos_aprobados += materia['creditos']
+    for materia in materiasAprobadas:
+        creditos_aprobados += materia['creditos']
     if creditos_aprobados > 0:
+        print('creditos_aprobados', creditos_aprobados)
         print(
             f"[!] Su porcentaje de avance es de: {(creditos_aprobados/creditostotales)*100}%")
     else:
         print("[!] No tiene creditos para calcular el porcentaje de avance.")
+
+
+def doble_titulacion(papa_, porcentajeAvance_, carrera_usuario1, carrera_usuario2):
+    if papa > 4.3 and porcentajeAvance > 40:
+        print('FELICIDADES')
+        print("Usted puede hacer doble titulación con ")
 
 
 def papa(carrera_usuario):
@@ -142,8 +156,8 @@ def papa(carrera_usuario):
 def seleccionar_plan():
     carrera = input(
         "[?] Ingrese qué carrera está cursando: Ciencias de la computación (cc), Estadística (est), Matemáticas (math), Ing. Sistemas (sis): ")
-    global carrera1
-    carrera1 = carrera
+    global carreraNombre
+    carreraNombre = carrera
     if carrera.lower() == 'cc':
         with open('pensum_cc.pkl', 'rb') as archivo:
             cc = pickle.load(archivo)
@@ -166,7 +180,7 @@ def main():
     usuario = []
     carrera = seleccionar_plan()
     inscribir_materias(usuario, carrera)
-    porcentajeAvance(usuario, carrera1)
+    porcentajeAvance(usuario, carreraNombre)
     papa(usuario)
 
 
