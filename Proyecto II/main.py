@@ -198,7 +198,8 @@ def seleccionar_plan_segunda_carrera(nombrePrimeraCarrera):
         with open('pensum_math.pkl', 'rb') as archivo:
             carreraEscogida = pickle.load(archivo)
     elif carrera.lower() == 'sis':
-        return 0
+        with open('pensum_sys.pkl', 'rb') as archivo:
+            carreraEscogida = pickle.load(archivo)
     else:
         print("[!] Carrera no encontrada")
         return 0
@@ -267,7 +268,9 @@ def seleccionar_plan():
             math = pickle.load(archivo)
         return math
     elif carrera.lower() == 'sis':
-        return 0
+        with open('pensum_sys.pkl', 'rb') as archivo:
+            sis = pickle.load(archivo)
+        return sis
     else:
         print("[!] Carrera no encontrada")
         exit(0)
