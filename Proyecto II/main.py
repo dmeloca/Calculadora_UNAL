@@ -90,7 +90,8 @@ def grade(usuario):
                     copia['id'] = materia['id']
                     copia["ponderación"] = nota * copia['creditos']
                     usuario.append(copia)
-                    materiasAprobadas.append({'nombre': materia['nombre'], 'id': materia['id'], 'creditos': materia['creditos']})
+                    materiasAprobadas.append(
+                        {'nombre': materia['nombre'], 'id': materia['id'], 'creditos': materia['creditos']})
                     creditxgrade += copia['ponderación']
                     credits += copia['creditos']
                 else:
@@ -129,6 +130,11 @@ def perdida(materia):
 def creditosfnl(usuario, carrera):
     bolsadecreditos = 0
     bolsadecreditos1 = 0
+    cancelo = input("[?] Cancelo materias? (S/N) ")
+    if cancelo.lower() == 's':
+        creditosCancelados = int(
+            input("[?] Ingrese los creditos cancelados: "))
+        bolsadecreditos1 -= creditosCancelados
     if carrera == 'cc':
         bolsadecreditos = creditostotalescc
     elif carrera == 'est':
@@ -137,11 +143,12 @@ def creditosfnl(usuario, carrera):
         bolsadecreditos = creditostotalesmath
     elif carrera == 'sis':
         bolsadecreditos = creditostotalessis
+
     for materia in usuario:
         if materia['perdida'] == 0:
             bolsadecreditos1 += materia['creditos']*2
-        if bolsadecreditos1 > bolsadecreditos/2:
-            bolsadecreditos1 = bolsadecreditos/2
+            if bolsadecreditos1 > bolsadecreditos/2:
+                bolsadecreditos1 = bolsadecreditos/2
         else:
             bolsadecreditos1 -= materia['creditos']
     bolsadecreditos1 = ceil(bolsadecreditos1)
@@ -289,10 +296,10 @@ def main():
     inscribir_materias(usuario, carrera)
     porcentajeAvancev = porcentajeAvance(usuario, carreraNombre)
     papav = papa(usuario)
+    creditosfnlv = creditosfnl(usuario, carreraNombre)
     materiasSegundaCarrera = seleccionar_plan_segunda_carrera(carreraNombre)
     materiasH = materiasHomologables(materiasAprobadas, materiasSegundaCarrera)
     creditosN = creditosNecesarios(segundaCarreraNombre, materiasH)
-    creditosfnlv = creditosfnl(usuario, carreraNombre)
     doble_titulacion(papav, porcentajeAvancev, creditosN, creditosfnlv)
 
 
