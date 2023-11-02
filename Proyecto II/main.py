@@ -1,8 +1,14 @@
 import unicodedata
 import pickle
-
+from math import ceil
 carreraNombre = ''
 materiasAprobadas = []
+segundaCarreraNombre = ''
+creditosmaterias = 0
+creditostotalescc = 139
+creditostotalesest = 141
+creditostotalesmath = 140
+creditostotalessis = 165
 
 
 def strip_accents(s):
@@ -29,8 +35,9 @@ def inscribir_materias(usuario, carrera):
                 f"[?] Desea ingresar {answer} (que no está en el listado) (S/N)")
             if a == "S" or a == "s":
                 new_m = crear_materias(answer)
-                new_m['id'] = f"{new_m['id']}_{intento}"
+                new_m['id'] = f"{new_m['id']}"
                 usuario.append(new_m)
+                print('new_m', new_m)
             else:
                 print("[!] Materia No válida")
         if usuario:
@@ -38,9 +45,9 @@ def inscribir_materias(usuario, carrera):
             for i, materia in enumerate(usuario, start=1):
                 print(f" |- {i}.", materia['nombre'])
         another = input("[!] Desea ingresar más materias (S/N)")
+        print('usuario', usuario)
         if another.lower() == "n":
             break  # Salir del bucle si no desea ingresar más materias
-
     # Después de que el usuario termine de inscribir materias, ingresamos las notas.
     grade(usuario)
 
@@ -79,15 +86,20 @@ def grade(usuario):
                     f"[?] Ingrese la nota que obtuvo en {materia['nombre']} (intento {a+1}): "))
                 copia = materia.copy()
                 intento = str(a)
-                copia['id'] += intento
-                copia['nota'] = nota
-                copia["ponderación"] = nota * copia['creditos']
-                usuario.append(copia)
-                creditxgrade += copia['ponderación']
-                credits += copia['creditos']
                 if nota >= 3:
-                    materiasAprobadas.append(
-                        {'id': materia['id'], 'creditos': materia['creditos']})
+                    copia['perdida'] = 0
+                    copia['id'] = materia['id']
+                    copia["ponderación"] = nota * copia['creditos']
+                    usuario.append(copia)
+                    creditxgrade += copia['ponderación']
+                    credits += copia['creditos']
+                else:
+                    copia['id'] += intento
+                    copia['nota'] = nota
+                    copia["ponderación"] = nota * copia['creditos']
+                    usuario.append(copia)
+                    creditxgrade += copia['ponderación']
+                    credits += copia['creditos']
             usuario.remove(materia)
             # print('usuario', usuario)
         else:
@@ -113,31 +125,107 @@ def perdida(materia):
         print("[!] Ingrese un valor correcto")
 
 
+def creditosfnl(usuario, carrera):
+    print('usuario', usuario)
+    print('carrera', carrera)
+    bolsadecreditos = 0
+    bolsadecreditos1 = 0
+    if carrera == 'cc':
+        bolsadecreditos = creditostotalescc
+    elif carrera == 'est':
+        bolsadecreditos = creditostotalesest
+    elif carrera == 'math':
+        bolsadecreditos = creditostotalesmath
+    elif carrera == 'sis':
+        bolsadecreditos = creditostotalessis
+    for materia in usuario:
+        if materia['perdida'] == 0:
+            bolsadecreditos1 += materia['creditos']*2
+        if bolsadecreditos1 > bolsadecreditos/2:
+            bolsadecreditos1 = bolsadecreditos/2
+        else:
+            bolsadecreditos1 -= materia['creditos']
+    bolsadecreditos1 = ceil(bolsadecreditos1)
+    print('creditos adicionales', bolsadecreditos1)
+    return bolsadecreditos1
+
+
 def porcentajeAvance(materiasAprobadas, carrera):
     creditos_aprobados = 0
     creditostotales = 0
     if carrera == 'cc':
         creditostotales = 139
     elif carrera == 'est':
-        creditostotales = 132
+        creditostotales = 141
     elif carrera == 'math':
-        creditostotales = 131
+        creditostotales = 140
     elif carrera == 'sis':
-        creditostotales = 178
+        creditostotales = 165
     for materia in materiasAprobadas:
         creditos_aprobados += materia['creditos']
     if creditos_aprobados > 0:
         print('creditos_aprobados', creditos_aprobados)
         print(
             f"[!] Su porcentaje de avance es de: {(creditos_aprobados/creditostotales)*100}%")
+        return (creditos_aprobados/creditostotales)*100
     else:
         print("[!] No tiene creditos para calcular el porcentaje de avance.")
 
 
-def doble_titulacion(papa_, porcentajeAvance_, carrera_usuario1, carrera_usuario2):
-    if papa > 4.3 and porcentajeAvance > 40:
-        print('FELICIDADES')
-        print("Usted puede hacer doble titulación con ")
+def seleccionar_plan_segunda_carrera(nombrePrimeraCarrera):
+    carreraEscogida = 0
+    materiasSegundaCarrera = []
+    carrera = input(
+        "[?] Ingrese para que carrera quiere hacer la doble : Ciencias de la computación (cc), Estadística (est), Matemáticas (math), Ing. Sistemas (sis): ")
+    global segundaCarreraNombre
+    segundaCarreraNombre = carrera
+    if carrera.lower() == nombrePrimeraCarrera.lower():
+        print("[!] No puede hacer doble titulación con la misma carrera")
+        return 0
+    if carrera.lower() == 'cc':
+        with open('pensum_cc.pkl', 'rb') as archivo:
+            carreraEscogida = pickle.load(archivo)
+    elif carrera.lower() == 'est':
+        with open('pensum_est.pkl', 'rb') as archivo:
+            carreraEscogida = pickle.load(archivo)
+    elif carrera.lower() == 'math':
+        with open('pensum_math.pkl', 'rb') as archivo:
+            carreraEscogida = pickle.load(archivo)
+    elif carrera.lower() == 'sis':
+        return 0
+    else:
+        print("[!] Carrera no encontrada")
+        return 0
+    for materia in carreraEscogida:
+        materiasSegundaCarrera.append(
+            {'id': materia['id'], 'creditos': materia['creditos']})
+    # print('materiasSegundaCarrera', materiasSegundaCarrera)
+    return materiasSegundaCarrera
+
+
+def materiasHomologables(materiasAprobadas, materiasSegundaCarrera):
+    materiasHomologables = []
+    for materia in materiasAprobadas:
+        for materia2 in materiasSegundaCarrera:
+            if materia['id'] == materia2['id']:
+                materiasHomologables.append(materia)
+    print('materiasHomologables', materiasHomologables)
+    return materiasHomologables
+
+
+def doble_titulacion(papa, porcentajeAvance, creditosNecesarios, creditosAdicionales):
+    if porcentajeAvance >= 40:
+        if papa >= 4.3:
+            print('FELICIDADES')
+            print("Usted elegible hacer doble titulación con ")
+        elif creditosAdicionales-creditosNecesarios >= 0:
+            print('FELICIDADES')
+            print("Usted elegible hacer doble titulación con ")
+        else:
+            print('Lo sentimos, no es elegible para hacer doble titulación')
+
+    else:
+        print('Lo sentimos, no es elegible para hacer doble titulación')
 
 
 def papa(carrera_usuario):
@@ -149,6 +237,7 @@ def papa(carrera_usuario):
             creditos += materia['creditos']
     if creditos > 0:
         print(f"[!] Su PAPA es de: {notas/creditos}")
+        return notas/creditos
     else:
         print("[!] No se han ingresado notas para calcular el PAPA.")
 
@@ -176,12 +265,34 @@ def seleccionar_plan():
         print("[!] Carrera no encontrada")
 
 
+def creditosNecesarios(nombreSegundaCarrera, materiasH):
+    creditos = 0
+    if nombreSegundaCarrera == 'cc':
+        creditos = 139
+    elif nombreSegundaCarrera == 'est':
+        creditos = 141
+    elif nombreSegundaCarrera == 'math':
+        creditos = 140
+    elif nombreSegundaCarrera == 'sis':
+        creditos = 165
+    for materia in materiasH:
+        creditos -= materia['creditos']
+    print('creditos', creditos)
+    return creditos
+
+
 def main():
     usuario = []
+    # esto va despues pero es para probar
     carrera = seleccionar_plan()
     inscribir_materias(usuario, carrera)
-    porcentajeAvance(usuario, carreraNombre)
-    papa(usuario)
+    porcentajeAvancev = porcentajeAvance(usuario, carreraNombre)
+    papav = papa(usuario)
+    materiasSegundaCarrera = seleccionar_plan_segunda_carrera(carreraNombre)
+    materiasH = materiasHomologables(materiasAprobadas, materiasSegundaCarrera)
+    creditosN = creditosNecesarios(segundaCarreraNombre, materiasH)
+    creditosfnlv = creditosfnl(usuario, carreraNombre)
+    doble_titulacion(papav, porcentajeAvancev, creditosN, creditosfnlv)
 
 
 if __name__ == "__main__":
