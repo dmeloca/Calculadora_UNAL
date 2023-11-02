@@ -12,7 +12,7 @@ fundamentos_de_matematicas = {
 
 calculo_diferencial_en_una_variable = {
     'nombre': 'Cálculo diferencial en una variable',
-    'id': 'calculodiferencialenunavariable',
+    'id': 'calculodiferencial',
     'codigo': 2016377,
     'creditos': 4,
     'obligatoria': 1,
@@ -22,7 +22,7 @@ calculo_diferencial_en_una_variable = {
 
 introduccion_la_teoria_de_conjuntos = {
     'nombre': 'Introducción a la Teoría de Conjuntos',
-    'id': 'introduccionalateoriadeconjuntos',
+    'id': 'introduccionteoriadeconjuntos',
     'codigo': 2025819,
     'creditos': 4,
     'obligatoria': 1,
@@ -32,7 +32,7 @@ introduccion_la_teoria_de_conjuntos = {
 
 algebra_lineal_basica = {
     'nombre': 'Álgebra lineal básica',
-    'id': 'algebralinealbasica',
+    'id': 'algebralineal',
     'codigo': 2015555,
     'creditos': 4,
     'obligatoria': 1,
@@ -42,7 +42,7 @@ algebra_lineal_basica = {
 
 calculo_integral_en_una_variable = {
     'nombre': 'Cálculo integral en una variable',
-    'id': 'calculointegralenunavariable',
+    'id': 'calculointegral',
     'codigo': 2015556,
     'creditos': 4,
     'obligatoria': 1,
@@ -62,7 +62,7 @@ sistemas_numericos = {
 
 calculo_de_ecuaciones_diferenciales_ordinarias = {
     'nombre': 'Cálculo de ecuaciones diferenciales ordinarias',
-    'id': 'calculodeecuacionesdiferencialesordinarias',
+    'id': 'ecuacionesdiferenciales',
     'codigo': 2016342,
     'creditos': 4,
     'obligatoria': 1,
