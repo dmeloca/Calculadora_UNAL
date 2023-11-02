@@ -45,7 +45,6 @@ def inscribir_materias(usuario, carrera):
             for i, materia in enumerate(usuario, start=1):
                 print(f" |- {i}.", materia['nombre'])
         another = input("[!] Desea ingresar más materias (S/N)")
-        print('usuario', usuario)
         if another.lower() == "n":
             break  # Salir del bucle si no desea ingresar más materias
     # Después de que el usuario termine de inscribir materias, ingresamos las notas.
@@ -91,6 +90,7 @@ def grade(usuario):
                     copia['id'] = materia['id']
                     copia["ponderación"] = nota * copia['creditos']
                     usuario.append(copia)
+                    materiasAprobadas.append({'nombre': materia['nombre'], 'id': materia['id'], 'creditos': materia['creditos']})
                     creditxgrade += copia['ponderación']
                     credits += copia['creditos']
                 else:
@@ -106,12 +106,13 @@ def grade(usuario):
             nota = float(
                 input(f"[?] Ingrese la nota que obtuvo en {materia['nombre']}: "))
             materiasAprobadas.append(
-                {'id': materia['id'], 'creditos': materia['creditos']})
+                {'nombre': materia['nombre'], 'id': materia['id'], 'creditos': materia['creditos']})
             materia['nota'] = nota
             materia["ponderación"] = nota * materia['creditos']
             creditxgrade += materia['ponderación']
             credits += materia['creditos']
-    print('materiasAprobadas', materiasAprobadas)
+    for aprobado in materiasAprobadas:
+        print('[!] MateriasAprobadas: ', aprobado['nombre'])
     return creditxgrade, credits
 
 
@@ -126,8 +127,6 @@ def perdida(materia):
 
 
 def creditosfnl(usuario, carrera):
-    print('usuario', usuario)
-    print('carrera', carrera)
     bolsadecreditos = 0
     bolsadecreditos1 = 0
     if carrera == 'cc':
@@ -146,7 +145,7 @@ def creditosfnl(usuario, carrera):
         else:
             bolsadecreditos1 -= materia['creditos']
     bolsadecreditos1 = ceil(bolsadecreditos1)
-    print('creditos adicionales', bolsadecreditos1)
+    print(f'[$] Usted tiene {bolsadecreditos1} creditos adicionales')
     return bolsadecreditos1
 
 
@@ -164,7 +163,7 @@ def porcentajeAvance(materiasAprobadas, carrera):
     for materia in materiasAprobadas:
         creditos_aprobados += materia['creditos']
     if creditos_aprobados > 0:
-        print('creditos_aprobados', creditos_aprobados)
+        print('[$] Creditos aprobados', creditos_aprobados)
         print(
             f"[!] Su porcentaje de avance es de: {(creditos_aprobados/creditostotales)*100}%")
         return (creditos_aprobados/creditostotales)*100
@@ -181,7 +180,7 @@ def seleccionar_plan_segunda_carrera(nombrePrimeraCarrera):
     segundaCarreraNombre = carrera
     if carrera.lower() == nombrePrimeraCarrera.lower():
         print("[!] No puede hacer doble titulación con la misma carrera")
-        return 0
+        exit(0)
     if carrera.lower() == 'cc':
         with open('pensum_cc.pkl', 'rb') as archivo:
             carreraEscogida = pickle.load(archivo)
@@ -209,23 +208,24 @@ def materiasHomologables(materiasAprobadas, materiasSegundaCarrera):
         for materia2 in materiasSegundaCarrera:
             if materia['id'] == materia2['id']:
                 materiasHomologables.append(materia)
-    print('materiasHomologables', materiasHomologables)
+    for homologable in materiasHomologables:
+        print('[!] Materias Homologables: ', homologable['nombre'])
     return materiasHomologables
 
 
 def doble_titulacion(papa, porcentajeAvance, creditosNecesarios, creditosAdicionales):
     if porcentajeAvance >= 40:
         if papa >= 4.3:
-            print('FELICIDADES')
-            print("Usted elegible hacer doble titulación con ")
+            print('[+] FELICIDADES')
+            print("[$] Usted elegible hacer doble titulación ")
         elif creditosAdicionales-creditosNecesarios >= 0:
-            print('FELICIDADES')
-            print("Usted elegible hacer doble titulación con ")
+            print('[+] FELICIDADES')
+            print("[$] Usted elegible hacer doble titulación ")
         else:
-            print('Lo sentimos, no es elegible para hacer doble titulación')
+            print('[!] Lo sentimos, no es elegible para hacer doble titulación')
 
     else:
-        print('Lo sentimos, no es elegible para hacer doble titulación')
+        print('[!] Lo sentimos, no es elegible para hacer doble titulación')
 
 
 def papa(carrera_usuario):
@@ -263,6 +263,7 @@ def seleccionar_plan():
         return 0
     else:
         print("[!] Carrera no encontrada")
+        exit(0)
 
 
 def creditosNecesarios(nombreSegundaCarrera, materiasH):
@@ -277,7 +278,7 @@ def creditosNecesarios(nombreSegundaCarrera, materiasH):
         creditos = 165
     for materia in materiasH:
         creditos -= materia['creditos']
-    print('creditos', creditos)
+    print('[*] Creditos necesarios ', creditos)
     return creditos
 
 
