@@ -1,310 +1,337 @@
-import unicodedata
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
 import pickle
-from math import ceil
+from module import seleccionar_plan, inscribir_materias_pensum, materiasVistas
+# Cargar materias de Ciencias de la Computación desde un archivo pickle
+with open('pensum_cc.pkl', 'rb') as archivo:
+    materias_cc = pickle.load(archivo)
+
+# Lista que mantendrá las materias seleccionadas junto con las notas
 carreraNombre = ''
-materiasAprobadas = []
-segundaCarreraNombre = ''
-creditosmaterias = 0
-creditostotalescc = 139
-creditostotalesest = 141
-creditostotalesmath = 140
-creditostotalessis = 165
+materias_vistas = []
+creditos_totales_carrera = {
+    "Ciencias de la Computacion": 139,
+    "Matematicas": 140,
+    "Estadistica": 141,
+    "Ingenieria de Sistemas": 165
+}
+creditos_adicionales = 0
+# Calcular el total de créditos de todas las materias
+total_creditos = sum(materia['creditos'] for materia in materias_cc)
 
 
-def strip_accents(s):
-    s = ''.join(c for c in unicodedata.normalize(
-        'NFD', s) if unicodedata.category(c) != 'Mn')
-    s = s.replace(' ', '').lower()
-    return s
+def agregar_nueva_materia():
+    ventana_agregar = tk.Toplevel(root)
+    ventana_agregar.title("Agregar Nueva Materia")
+
+    # Campos de entrada: nombre, créditos y nota
+    tk.Label(ventana_agregar, text="Nombre:").pack(pady=2)
+    nombre_var = tk.StringVar()
+    entrada_nombre = ttk.Entry(ventana_agregar, textvariable=nombre_var)
+    entrada_nombre.pack(pady=2)
+
+    tk.Label(ventana_agregar, text="Créditos:").pack(pady=2)
+    creditos_var = tk.IntVar()
+    entrada_creditos = ttk.Entry(ventana_agregar, textvariable=creditos_var)
+    entrada_creditos.pack(pady=2)
+
+    tk.Label(ventana_agregar, text="Nota:").pack(pady=2)
+    nota_var = tk.DoubleVar()
+    entrada_nota = ttk.Entry(ventana_agregar, textvariable=nota_var)
+    entrada_nota.pack(pady=2)
+
+    # Función para guardar la nueva materia
+    def guardar_materia():
+        nombre = nombre_var.get().strip()
+        creditos = creditos_var.get()
+        nota = nota_var.get()
+        # Crear ID único a partir del nombre en minúsculas y sin espacios
+        id_materia = nombre.replace(" ", "").lower()
+        nueva_materia = {'id': id_materia, 'nombre': nombre,
+                         'creditos': creditos, 'nota': nota}
+        if nueva_materia['nota'] < 3:
+            nueva_materia['perdida'] = 1
+        else:
+            nueva_materia['perdida'] = 0
+        # Aquí asumimos que quieres añadir la materia al pensum general
+        materias_vistas.append(nueva_materia)
+        ventana_agregar.destroy()
+        actualizar_lista_seleccionadas()
+        calcular_avance()
+        calcular_promedio()
+        print('carrera', carreraNombre)
+        actualizar_creditos_adicionales(carreraNombre)
+
+    # Botón para guardar la nueva materia
+    ttk.Button(ventana_agregar, text="Guardar Materia",
+               command=guardar_materia).pack(pady=10)
+    # Poner el foco en el campo de entrada del nombre y esperar a que la ventana se cierre
+    entrada_nombre.focus_set()
 
 
-def append_topic(usuario, id, carrera):
-    for topic in carrera:
-        if id == topic.get('id'):
-            usuario.append(topic)
-            return 0
+def ingresar_nota(materia):
+    # Crear una ventana emergente
+    ventana_nota = tk.Toplevel(root)
+    ventana_nota.title(f"Ingresar Nota para {materia['nombre']}")
+    tk.Label(ventana_nota, text=f"Ingrese la nota para {materia['nombre']}:", font=(
+        'Calibri', 12)).pack(pady=10)
 
+    # Campo de entrada para la nota
+    nota_var = tk.StringVar()
+    entrada_nota = ttk.Entry(
+        ventana_nota, textvariable=nota_var, font=('Calibri', 12))
+    entrada_nota.pack(pady=5)
 
-def inscribir_materias(usuario, carrera):
-    while True:
-        answer = input(f"[*] Ingrese la materia que vió: \n")
-        answer1 = strip_accents(answer)
-        intento = append_topic(usuario, answer1, carrera)
-        if intento != 0:
-            a = input(
-                f"[?] Desea ingresar {answer} (que no está en el listado) (S/N)")
-            if a == "S" or a == "s":
-                new_m = crear_materias(answer)
-                new_m['id'] = f"{new_m['id']}"
-                usuario.append(new_m)
-                print('new_m', new_m)
+    # Función para guardar la nota y cerrar la ventana emergente
+    def guardar_nota():
+        try:
+            # Aquí se podría validar la nota antes de asignarla
+            nota = float(nota_var.get())
+            if nota < 3:
+                materia['perdida'] = 1
             else:
-                print("[!] Materia No válida")
-        if usuario:
-            print("[-] Materias inscritas:")
-            for i, materia in enumerate(usuario, start=1):
-                print(f" |- {i}.", materia['nombre'])
-        another = input("[!] Desea ingresar más materias (S/N)")
-        if another.lower() == "n":
-            break  # Salir del bucle si no desea ingresar más materias
-    # Después de que el usuario termine de inscribir materias, ingresamos las notas.
-    grade(usuario)
-
-
-def crear_materias(nombre):
-    id = strip_accents(nombre)
-    codigo = int(
-        input("[?] Ingrese el código de la materia (si no lo conoce ingrese un cero) "))
-    credits = int(input("[?] Ingrese el número de créditos de la materia "))
-    obligatoria = 0
-    tipo = input("[?] Ingrese el tipo de la materia ")
-    tempdict = {
-        'nombre': nombre,
-        'id': id,
-        'código': codigo,
-        'creditos': credits,
-        'obligatoria': obligatoria,
-        'tipo': tipo
-    }
-    return tempdict
-
-
-def grade(usuario):
-    creditxgrade = 0
-    credits = 0
-    global materiasAprobadas
-    # print('usuario', usuario)
-    usuariosolomaterias = usuario.copy()
-    for materia in usuariosolomaterias:
-        perdida(materia)
-        if materia['perdida'] == 1:
-            intentos = int(
-                input(f"[?] Cuantas veces vio {materia['nombre']}: "))
-            for a in range(intentos):
-                nota = float(input(
-                    f"[?] Ingrese la nota que obtuvo en {materia['nombre']} (intento {a+1}): "))
-                copia = materia.copy()
-                intento = str(a)
-                if nota >= 3:
-                    copia['perdida'] = 0
-                    copia['id'] = materia['id']
-                    copia["ponderación"] = nota * copia['creditos']
-                    usuario.append(copia)
-                    materiasAprobadas.append(
-                        {'nombre': materia['nombre'], 'id': materia['id'], 'creditos': materia['creditos']})
-                    creditxgrade += copia['ponderación']
-                    credits += copia['creditos']
-                else:
-                    copia['id'] += intento
-                    copia['nota'] = nota
-                    copia["ponderación"] = nota * copia['creditos']
-                    usuario.append(copia)
-                    creditxgrade += copia['ponderación']
-                    credits += copia['creditos']
-            usuario.remove(materia)
-            # print('usuario', usuario)
-        else:
-            nota = float(
-                input(f"[?] Ingrese la nota que obtuvo en {materia['nombre']}: "))
-            materiasAprobadas.append(
-                {'nombre': materia['nombre'], 'id': materia['id'], 'creditos': materia['creditos']})
+                materia['perdida'] = 0
             materia['nota'] = nota
-            materia["ponderación"] = nota * materia['creditos']
-            creditxgrade += materia['ponderación']
-            credits += materia['creditos']
-    for aprobado in materiasAprobadas:
-        print('[!] MateriasAprobadas: ', aprobado['nombre'])
-    return creditxgrade, credits
+            ventana_nota.destroy()
+            actualizar_lista_seleccionadas()
+            calcular_avance()
+            calcular_promedio()
+            print('carrera', carreraNombre)
+            actualizar_creditos_adicionales(carreraNombre)
+        except ValueError:
+            tk.messagebox.showerror(
+                "Error", "Por favor ingrese un valor numérico para la nota.")
+    # Botón para guardar la nota
+    boton_guardar = ttk.Button(
+        ventana_nota, text="Guardar Nota", command=guardar_nota)
+    boton_guardar.pack(pady=20)
+
+    # Pone el foco en el campo de entrada y espera a que la ventana se cierre
+    entrada_nota.focus_set()
 
 
-def perdida(materia):
-    answer = input(f"[?] Perdió la materia {materia['nombre']}? (S/N)")
-    if answer.lower() == "s":
-        materia['perdida'] = 1
-    elif answer.lower() == "n":
-        materia['perdida'] = 0
-    else:
-        print("[!] Ingrese un valor correcto")
+def agregar_materia_seleccionada(materia):
+    for materia_seleccionada in materias_vistas:
+        # and materia['perdida'] == 0:
+        if materia_seleccionada['id'] == materia['id'] and materia_seleccionada['perdida'] == 0:
+            return  # No agregar si la materia ya está seleccionada y la paso
+    materia_con_nota = {
+        'id': materia['id'], 'nombre': materia['nombre'], 'nota': None, 'creditos': materia['creditos']}
+    ingresar_nota(materia_con_nota)
+    materias_vistas.append(materia_con_nota)
+    print('total creditos', total_creditos)
+    # calcular_avance()
+    # calcular_promedio()
+    print(materias_vistas)
 
 
-def creditosfnl(usuario, carrera):
-    bolsadecreditos = 0
-    bolsadecreditos1 = 0
-    cancelo = input("[?] Cancelo materias? (S/N) ")
-    if cancelo.lower() == 's':
-        creditosCancelados = int(
-            input("[?] Ingrese los creditos cancelados: "))
-        bolsadecreditos1 -= creditosCancelados
-    if carrera == 'cc':
-        bolsadecreditos = creditostotalescc
-    elif carrera == 'est':
-        bolsadecreditos = creditostotalesest
-    elif carrera == 'math':
-        bolsadecreditos = creditostotalesmath
-    elif carrera == 'sis':
-        bolsadecreditos = creditostotalessis
-
-    for materia in usuario:
-        if materia['perdida'] == 0:
-            bolsadecreditos1 += materia['creditos']*2
-            if bolsadecreditos1 > bolsadecreditos/2:
-                bolsadecreditos1 = bolsadecreditos/2
-        else:
-            bolsadecreditos1 -= materia['creditos']
-    bolsadecreditos1 = ceil(bolsadecreditos1)
-    print(f'[$] Usted tiene {bolsadecreditos1} creditos adicionales')
-    return bolsadecreditos1
-
-
-def porcentajeAvance(materiasAprobadas, carrera):
-    creditos_aprobados = 0
-    creditostotales = 0
-    if carrera == 'cc':
-        creditostotales = 139
-    elif carrera == 'est':
-        creditostotales = 141
-    elif carrera == 'math':
-        creditostotales = 140
-    elif carrera == 'sis':
-        creditostotales = 165
-    for materia in materiasAprobadas:
-        creditos_aprobados += materia['creditos']
-    if creditos_aprobados > 0:
-        print('[$] Creditos aprobados', creditos_aprobados)
-        print(
-            f"[!] Su porcentaje de avance es de: {(creditos_aprobados/creditostotales)*100}%")
-        return (creditos_aprobados/creditostotales)*100
-    else:
-        print("[!] No tiene creditos para calcular el porcentaje de avance.")
-
-
-def seleccionar_plan_segunda_carrera(nombrePrimeraCarrera):
-    carreraEscogida = 0
-    materiasSegundaCarrera = []
-    carrera = input(
-        "[?] Ingrese para que carrera quiere hacer la doble : Ciencias de la computación (cc), Estadística (est), Matemáticas (math), Ing. Sistemas (sis): ")
-    global segundaCarreraNombre
-    segundaCarreraNombre = carrera
-    if carrera.lower() == nombrePrimeraCarrera.lower():
-        print("[!] No puede hacer doble titulación con la misma carrera")
-        exit(0)
-    if carrera.lower() == 'cc':
-        with open('pensum_cc.pkl', 'rb') as archivo:
-            carreraEscogida = pickle.load(archivo)
-    elif carrera.lower() == 'est':
-        with open('pensum_est.pkl', 'rb') as archivo:
-            carreraEscogida = pickle.load(archivo)
-    elif carrera.lower() == 'math':
-        with open('pensum_math.pkl', 'rb') as archivo:
-            carreraEscogida = pickle.load(archivo)
-    elif carrera.lower() == 'sis':
-        with open('pensum_sys.pkl', 'rb') as archivo:
-            carreraEscogida = pickle.load(archivo)
-    else:
-        print("[!] Carrera no encontrada")
-        return 0
-    for materia in carreraEscogida:
-        materiasSegundaCarrera.append(
-            {'id': materia['id'], 'creditos': materia['creditos']})
-    # print('materiasSegundaCarrera', materiasSegundaCarrera)
-    return materiasSegundaCarrera
-
-
-def materiasHomologables(materiasAprobadas, materiasSegundaCarrera):
-    materiasHomologables = []
-    for materia in materiasAprobadas:
-        for materia2 in materiasSegundaCarrera:
-            if materia['id'] == materia2['id']:
-                materiasHomologables.append(materia)
-    for homologable in materiasHomologables:
-        print('[!] Materias Homologables: ', homologable['nombre'])
-    return materiasHomologables
-
-
-def doble_titulacion(papa, porcentajeAvance, creditosNecesarios, creditosAdicionales):
-    if porcentajeAvance >= 40:
-        if papa >= 4.3:
-            print('[+] FELICIDADES')
-            print("[$] Usted elegible hacer doble titulación ")
-        elif creditosAdicionales-creditosNecesarios >= 0:
-            print('[+] FELICIDADES')
-            print("[$] Usted elegible hacer doble titulación ")
-        else:
-            print('[!] Lo sentimos, no es elegible para hacer doble titulación')
-
-    else:
-        print('[!] Lo sentimos, no es elegible para hacer doble titulación')
-
-
-def papa(carrera_usuario):
-    notas = 0
-    creditos = 0
-    for materia in carrera_usuario:
-        if 'nota' in materia:
-            notas += materia['nota'] * materia['creditos']
-            creditos += materia['creditos']
-    if creditos > 0:
-        print(f"[!] Su PAPA es de: {notas/creditos}")
-        return notas/creditos
-    else:
-        print("[!] No se han ingresado notas para calcular el PAPA.")
-
-
-def seleccionar_plan():
-    carrera = input(
-        "[?] Ingrese qué carrera está cursando: Ciencias de la computación (cc), Estadística (est), Matemáticas (math), Ing. Sistemas (sis): ")
+def mostrar_materias(nombre_carrera):
+    # Ocultar el frame de las carreras
     global carreraNombre
-    carreraNombre = carrera
-    if carrera.lower() == 'cc':
-        with open('pensum_cc.pkl', 'rb') as archivo:
-            cc = pickle.load(archivo)
-        return cc
-    elif carrera.lower() == 'est':
-        with open('pensum_est.pkl', 'rb') as archivo:
-            est = pickle.load(archivo)
-        return est
-    elif carrera.lower() == 'math':
-        with open('pensum_math.pkl', 'rb') as archivo:
-            math = pickle.load(archivo)
-        return math
-    elif carrera.lower() == 'sis':
-        with open('pensum_sys.pkl', 'rb') as archivo:
-            sis = pickle.load(archivo)
-        return sis
+    carreraNombre = nombre_carrera
+    frame_carreras.pack_forget()
+    # Limpiar el canvas y el frame de contenido
+    carrera = seleccionar_plan(nombre_carrera)
+    for widget in frame_materias.winfo_children():
+        widget.destroy()
+    # Centrar el título de la carrera en el frame de materias
+    tk.Label(frame_materias, text=nombre_carrera, font=(
+        'Calibri', 16, 'bold')).pack(anchor='center')
+
+    # Actualizar el frame con las materias de la carrera seleccionada
+    for materia in carrera:
+        label_materia = tk.Label(frame_materias, text=materia['nombre'], font=(
+            'Calibri', 12), relief='raised')
+        label_materia.pack(anchor='center', pady=2)
+        label_materia.bind('<Button-1>', lambda e,
+                           m=materia: agregar_materia_seleccionada(m))
+
+    # Actualizar el área scrollable del canvas
+    canvas.update_idletasks()
+    canvas.config(scrollregion=canvas.bbox('all'))
+
+
+def actualizar_lista_seleccionadas():
+    # Limpiar el frame de materias seleccionadas
+    for widget in frame_materias_seleccionadas.winfo_children():
+        widget.destroy()
+
+    # Añadir las materias seleccionadas con un cuadro de texto para la nota
+    for materia in materias_vistas:
+        row_frame = ttk.Frame(frame_materias_seleccionadas)
+        row_frame.pack(fill='x', padx=5, pady=5)
+        tk.Label(row_frame, text=materia['nombre'], font=(
+            'Calibri', 12)).pack(side='left')
+        ttk.Label(row_frame, text=materia['nota'], font=(
+            'Calibri', 12)).pack(
+            side='right')
+
+
+# def actualizar_lista_seleccionadas():
+#     # Limpiar el frame de materias seleccionadas
+#     for widget in frame_materias_seleccionadas.winfo_children():
+#         widget.destroy()
+
+#     # Añadir las materias seleccionadas a la cuadrícula
+#     for index, materia in enumerate(materias_vistas):
+#         columna = index % 3
+#         fila = index // 3
+#         tk.Label(frame_materias_seleccionadas, text=materia['nombre'], font=(
+#             'Calibri', 12)).grid(row=fila, column=columna, sticky='w', padx=5, pady=5)
+
+#     # Actualizar el frame para que se ajuste a la cuadrícula
+#     frame_materias_seleccionadas.pack(side='top', fill='x', expand=True)
+
+
+def calcular_avance():
+    creditos_cursados = sum(materia['creditos'] for materia in [
+                            x for x in materias_vistas if x['perdida'] == 0])
+    print('creditosss', creditos_cursados)
+    porcentaje_avance = (creditos_cursados / total_creditos) * 100
+    lbl_avance.config(text=f"Avance de la carrera: {porcentaje_avance:.2f}%")
+
+
+def actualizar_creditos_adicionales(carrera):
+    global creditos_adicionales
+
+    creditos_adicionales = 0  # Reiniciar los créditos adicionales
+    limite_creditos = creditos_totales_carrera[carrera] / 2
+
+    for materia in materias_vistas:
+        if materia.get('perdida', 0) == 1:
+            # Restar los créditos de la materia si se perdió
+            creditos_adicionales -= materia['creditos']
+        else:
+            # Aumentar los créditos de la materia si se pasó
+            creditos_adicionales += materia['creditos'] * 2
+
+    # No permitir que los créditos adicionales sobrepasen el límite
+    creditos_adicionales = min(creditos_adicionales, limite_creditos)
+
+    # Actualizar el label con el nuevo valor de créditos adicionales
+    label_creditos_adicionales['text'] = f"Créditos adicionales: {creditos_adicionales}"
+
+
+def calcular_promedio():
+    total_notas = 0
+    cantidad_materias = 0
+    for materia in materias_vistas:
+        try:
+            nota = float(materia['nota'])
+            total_notas += nota
+            cantidad_materias += 1
+        except ValueError:
+            pass  # Ignorar si no es un número
+    if cantidad_materias > 0:
+        promedio = total_notas / cantidad_materias
+        lbl_promedio.config(text=f"Promedio: {promedio:.2f}")
     else:
-        print("[!] Carrera no encontrada")
-        exit(0)
+        lbl_promedio.config(
+            text="Introduce notas válidas para calcular el promedio.")
+# Función para actualizar los créditos adicionales
+# ... (Tu función 'actualizar_creditos_adicionales') ...
+
+# Función que se llama cuando se presiona el botón "OK"
 
 
-def creditosNecesarios(nombreSegundaCarrera, materiasH):
-    creditos = 0
-    if nombreSegundaCarrera == 'cc':
-        creditos = 139
-    elif nombreSegundaCarrera == 'est':
-        creditos = 141
-    elif nombreSegundaCarrera == 'math':
-        creditos = 140
-    elif nombreSegundaCarrera == 'sis':
-        creditos = 165
-    for materia in materiasH:
-        creditos -= materia['creditos']
-    print('[*] Creditos necesarios ', creditos)
-    return creditos
+def confirmar_creditos_cancelados():
+    global creditos_adicionales
+    try:
+        # Convertir el texto ingresado en el cuadro a un número
+        creditos_cancelados = float(entrada_creditos_cancelados.get())
+        # Actualizar los créditos adicionales
+        creditos_adicionales -= creditos_cancelados
+        # Asegurarse de que no sean menores de cero
+        creditos_adicionales = max(creditos_adicionales, 0)
+        # Actualizar la etiqueta de créditos adicionales
+        label_creditos_adicionales['text'] = f"Créditos adicionales: {creditos_adicionales}"
+    except ValueError:
+        messagebox.showerror(
+            "Error", "Por favor ingrese un número válido de créditos cancelados.")
 
 
-def main():
-    usuario = []
-    # esto va despues pero es para probar
-    carrera = seleccionar_plan()
-    inscribir_materias(usuario, carrera)
-    porcentajeAvancev = porcentajeAvance(usuario, carreraNombre)
-    papav = papa(usuario)
-    creditosfnlv = creditosfnl(usuario, carreraNombre)
-    materiasSegundaCarrera = seleccionar_plan_segunda_carrera(carreraNombre)
-    materiasH = materiasHomologables(materiasAprobadas, materiasSegundaCarrera)
-    creditosN = creditosNecesarios(segundaCarreraNombre, materiasH)
-    doble_titulacion(papav, porcentajeAvancev, creditosN, creditosfnlv)
+# Configuraciones iniciales
+root = tk.Tk()
+root.title("Calculadora UNAL - Doble Titulación")
+root.geometry('800x600')  # Ajusta el tamaño de la ventana principal
+# Estilos y configuraciones
+style = ttk.Style()
+style.configure("TButton", font=('Calibri', 12), padding=10)
+style.configure("TLabel", font=('Calibri', 12), padding=10)
+style.configure("TEntry", font=('Calibri', 12), padding=10)
+# Frame para los botones de las carreras
+frame_carreras = ttk.Frame(root)
+frame_carreras.pack(side='top', fill='x', pady=20)
+# Crear un canvas y una scrollbar para las materias
+canvas = tk.Canvas(root)
+scrollbar = ttk.Scrollbar(root, orient='vertical', command=canvas.yview)
+canvas.configure(yscrollcommand=scrollbar.set)
 
+# Empaquetar la scrollbar y el canvas para las materias
+scrollbar.pack(side='right', fill='y')
+canvas.pack(side='left', fill='both', expand=True)
+# Label para mostrar los créditos adicionales
+label_creditos_adicionales = ttk.Label(root, text="Créditos adicionales: 0")
+label_creditos_adicionales.pack(side='bottom')
+# Frame para mostrar las materias dentro del canvas
+frame_materias = ttk.Frame(canvas)
+canvas.create_window((0, 0), window=frame_materias, anchor='nw')
+# Botón para agregar nueva materia
+boton_agregar_materia = ttk.Button(
+    root, text="Agregar Materia", command=agregar_nueva_materia)
+boton_agregar_materia.pack(side='bottom', pady=10)
 
-if __name__ == "__main__":
-    main()
+# Frame para mostrar las materias seleccionadas y sus notas
+frame_materias_seleccionadas = ttk.Frame(root)
+frame_materias_seleccionadas.pack(side='bottom', fill='x', pady=20)
+# Botón para calcular el promedio
+# btn_calcular = ttk.Button(
+#     root, text="Calcular Promedio", command=calcular_promedio)
+# btn_calcular.pack(side='bottom', pady=5)
+
+# Etiqueta para mostrar el promedio
+lbl_promedio = ttk.Label(root, text="Promedio: 0", font=('Calibri', 14))
+lbl_promedio.pack(side='bottom', pady=5)
+# Etiqueta para mostrar el avance de la carrera
+lbl_avance = ttk.Label(
+    root, text="Avance de la carrera: 0%", font=('Calibri', 14))
+lbl_avance.pack(side='bottom', pady=5)
+# Cuadro de texto para los créditos cancelados
+label_creditos_cancelados = ttk.Label(root, text="Créditos cancelados:")
+label_creditos_cancelados.pack(side='bottom', pady=(5, 0))
+
+entrada_creditos_cancelados = ttk.Entry(root)
+entrada_creditos_cancelados.pack(side='bottom', pady=(0, 5))
+
+# Botón "OK" para confirmar los créditos cancelados
+boton_confirmar = ttk.Button(
+    root, text="OK", command=confirmar_creditos_cancelados)
+boton_confirmar.pack(side='bottom', pady=5)
+# Información de las carreras y las materias
+materias = {
+    "Ciencias de la Computación": materias_cc,
+    # ... otras carreras
+}
+carreras = {'Ciencias de la Computacion', 'Matematicas',
+            'Estadistica', 'Ingenieria de Sistemas'}
+# Botones para las carreras
+# carreras = materias.keys()
+for carrera in carreras:
+    boton = ttk.Button(frame_carreras, text=carrera,
+                       command=lambda c=carrera: mostrar_materias(c))
+    boton.pack(side='left', padx=10)
+boton = tk.Button(root, text="Haz clic en mí",
+                  fg="white",
+                  bg="blue",
+                  activeforeground="yellow",
+                  activebackground="green",
+                  borderwidth=2,
+                  relief="raised",
+                  padx=10,
+                  pady=5,
+                  font=("Helvetica", 12, "bold"))
+boton.pack(pady=10)
+
+# Ejecutar el bucle principal de Tkinter
+root.mainloop()
