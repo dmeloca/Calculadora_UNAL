@@ -4,23 +4,26 @@ from tkinter import messagebox
 import pickle
 from module import seleccionar_plan, inscribir_materias_pensum, materiasVistas
 # Cargar materias de Ciencias de la Computación desde un archivo pickle
-with open('pensum_cc.pkl', 'rb') as archivo:
-    materias_cc = pickle.load(archivo)
 
 # Lista que mantendrá las materias seleccionadas junto con las notas
 carreraNombre = ''
 materias_vistas = []
+porcentaje_avance = 0
+promedio = 0
+creditos_adicionales = 0
 creditos_totales_carrera = {
     "Ciencias de la Computacion": 139,
     "Matematicas": 140,
     "Estadistica": 141,
     "Ingenieria de Sistemas": 165
 }
-creditos_adicionales = 0
+carreras = {'Ciencias de la Computacion', 'Matematicas',
+            'Estadistica', 'Ingenieria de Sistemas'}
 # Calcular el total de créditos de todas las materias
-total_creditos = sum(materia['creditos'] for materia in materias_cc)
-
-
+total_creditos = 0#sum(materia['creditos'] for materia in materias_cc)
+def calcular_creditos_totales(carrera):
+    print('creditos totales', creditos_totales_carrera[carrera])
+    return creditos_totales_carrera[carrera]
 def agregar_nueva_materia():
     ventana_agregar = tk.Toplevel(root)
     ventana_agregar.title("Agregar Nueva Materia")
@@ -54,7 +57,6 @@ def agregar_nueva_materia():
             nueva_materia['perdida'] = 1
         else:
             nueva_materia['perdida'] = 0
-        # Aquí asumimos que quieres añadir la materia al pensum general
         materias_vistas.append(nueva_materia)
         ventana_agregar.destroy()
         actualizar_lista_seleccionadas()
@@ -128,6 +130,8 @@ def agregar_materia_seleccionada(materia):
 
 def mostrar_materias(nombre_carrera):
     # Ocultar el frame de las carreras
+    global total_creditos
+    total_creditos = calcular_creditos_totales(nombre_carrera)
     global carreraNombre
     carreraNombre = nombre_carrera
     frame_carreras.pack_forget()
@@ -185,6 +189,7 @@ def actualizar_lista_seleccionadas():
 
 
 def calcular_avance():
+    global porcentaje_avance
     creditos_cursados = sum(materia['creditos'] for materia in [
                             x for x in materias_vistas if x['perdida'] == 0])
     print('creditosss', creditos_cursados)
@@ -212,8 +217,10 @@ def actualizar_creditos_adicionales(carrera):
     # Actualizar el label con el nuevo valor de créditos adicionales
     label_creditos_adicionales['text'] = f"Créditos adicionales: {creditos_adicionales}"
 
+# Función para mostrar la "Calculadora UNAL"
 
 def calcular_promedio():
+    global promedio
     total_notas = 0
     cantidad_materias = 0
     for materia in materias_vistas:
@@ -249,6 +256,99 @@ def confirmar_creditos_cancelados():
     except ValueError:
         messagebox.showerror(
             "Error", "Por favor ingrese un número válido de créditos cancelados.")
+def mostrar_calculadora_unal():
+    materiasHomologables=[]
+    def creditosNecesarios(nombreSegundaCarrera):
+        creditos = 0
+        if nombreSegundaCarrera == 'Ciencias de la Computacion':
+            creditos = 139
+        elif nombreSegundaCarrera == 'Estadistica':
+            creditos = 141
+        elif nombreSegundaCarrera == 'Matematicas':
+            creditos = 140
+        elif nombreSegundaCarrera == 'Ingenieria de Sistemas':
+            creditos = 165
+        for materia in materiasHomologables:
+            creditos -= materia['creditos']
+        return creditos
+    def materiasHomologablesfuncion(nombreSegundaCarrera):
+        segundaCarrera=seleccionar_plan(nombreSegundaCarrera)
+        for materia in materias_vistas:
+            for materiaSegundaCarrera in segundaCarrera:
+                if materia['id']==materiaSegundaCarrera['id']:
+                    materiasHomologables.append(materia)
+        print(materiasHomologables)
+        mostrarMateriasHomologables()
+        return creditosNecesarios(nombreSegundaCarrera)
+    def doble_titulacion(papa, porcentajeAvance, creditosNecesarios, creditosAdicionales):
+        if porcentajeAvance >= 40:
+            if papa >= 4.3:
+                #con letras grandes y de color verde
+                print('[+] FELICIDADES')
+                print("[$] Usted elegible hacer doble titulación ")
+                return True
+            elif creditosAdicionales-creditosNecesarios >= 0:
+                #con letras grandes y de color verde
+                print('[+] FELICIDADES')
+                print("[$] Usted elegible hacer doble titulación ")
+                return True
+            else:
+                #con letras grandes y de color rojo
+                print('[!] Lo sentimos, no es elegible para hacer doble titulación')
+                return False
+        else:
+            print('[!] Lo sentimos, no es elegible para hacer doble titulación')
+            return False
+
+    def calculadorUnal(nombreSegundaCarrera):
+        creditosNecesariosV=materiasHomologablesfuncion(nombreSegundaCarrera)
+        tk.Label(ventana_calculadora_unal, text=f"creditos Necesarios: {creditosNecesariosV}" ).pack()
+        print('creditos necesarios',creditosNecesariosV)
+        tk.Label(ventana_calculadora_unal, text=f"creditos Adicionales: {creditos_adicionales}" ).pack()
+        mensaje=doble_titulacion(promedio, porcentaje_avance, creditosNecesariosV, creditos_adicionales)
+        mostrarMensaje(mensaje)
+    def mostrarMensaje(mensaje):
+        if mensaje:
+            #con letras grandes y de color verde
+            tk.Label(ventana_calculadora_unal, text="FELICIDADES, usted es elegible para hacer doble titulación", fg="green", font=('Calibri', 16, 'bold')).pack()
+
+        else:
+            #con letras grandes y de color rojo
+            tk.Label(ventana_calculadora_unal, text="Lo sentimos, no es elegible para hacer doble titulación", fg="red", font=('Calibri', 16, 'bold')).pack()
+
+            
+
+    # Crear una nueva ventana
+    ventana_calculadora_unal = tk.Toplevel(root, padx=250, pady=100)
+    ventana_calculadora_unal.title("Calculadora UNAL")
+    # subtitulo
+    ttk.Label(ventana_calculadora_unal, text="elija la carrera con la cual quiere hacer la doble", font=('Calibri', 16, 'bold')).pack(anchor='center')
+    # Etiquetas para mostrar la información
+    segundas_carreras = filter(lambda c: c != carreraNombre, carreras)
+    segundas_carreras=list(segundas_carreras)
+    for carrera in segundas_carreras:
+        boton_carrera = ttk.Button(ventana_calculadora_unal, text=carrera , command=lambda c=carrera: calculadorUnal(c) )
+        boton_carrera.pack(side='left', padx=10)
+    ttk.Label(ventana_calculadora_unal, text="Materias:").pack()
+    for materia in materias_vistas:
+        ttk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}: {materia['nota'] or 'Sin nota'}").pack()
+    #ttk.frame(materiasHomologables, text="Materias Homologables").pack()
+    ttk.Label(ventana_calculadora_unal, text=f"Promedio: {promedio}").pack()
+    ttk.Label(ventana_calculadora_unal, text=f"Avance de carrera: {porcentaje_avance:.2f}%").pack()
+    ttk.Label(ventana_calculadora_unal, text=f"Créditos adicionales: {creditos_adicionales}").pack()
+    ttk.Label(ventana_calculadora_unal, text="Materias homologables:").pack()
+
+    #mostramos las materias homologables
+    def mostrarMateriasHomologables():
+        for materia in materiasHomologables:
+            tk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}").pack()
+    
+    #mostrarMateriasHomologables()
+        # Crear un frame para los botones de las carreras no seleccionadas
+    frame_carreras_unal = ttk.Frame(ventana_calculadora_unal)
+    frame_carreras_unal.pack(pady=10)
+
+        
 
 
 # Configuraciones iniciales
@@ -309,29 +409,26 @@ boton_confirmar = ttk.Button(
     root, text="OK", command=confirmar_creditos_cancelados)
 boton_confirmar.pack(side='bottom', pady=5)
 # Información de las carreras y las materias
-materias = {
-    "Ciencias de la Computación": materias_cc,
-    # ... otras carreras
-}
-carreras = {'Ciencias de la Computacion', 'Matematicas',
-            'Estadistica', 'Ingenieria de Sistemas'}
+
 # Botones para las carreras
 # carreras = materias.keys()
 for carrera in carreras:
     boton = ttk.Button(frame_carreras, text=carrera,
                        command=lambda c=carrera: mostrar_materias(c))
     boton.pack(side='left', padx=10)
-boton = tk.Button(root, text="Haz clic en mí",
-                  fg="white",
-                  bg="blue",
-                  activeforeground="yellow",
-                  activebackground="green",
-                  borderwidth=2,
-                  relief="raised",
-                  padx=10,
-                  pady=5,
-                  font=("Helvetica", 12, "bold"))
-boton.pack(pady=10)
 
+# boton = tk.Button(root, text="Haz clic en mí",
+#                   fg="white",
+#                   bg="blue",
+#                   activeforeground="yellow",
+#                   activebackground="green",
+#                   borderwidth=2,
+#                   relief="raised",
+#                   padx=10,
+#                   pady=5,
+#                   font=("Helvetica", 12, "bold"))
+# boton.pack(pady=10)
+boton_calculadora_unal = ttk.Button(root, text="Calculadora UNAL", command=mostrar_calculadora_unal)
+boton_calculadora_unal.pack(pady=10)
 # Ejecutar el bucle principal de Tkinter
 root.mainloop()
