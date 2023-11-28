@@ -158,18 +158,36 @@ def mostrar_materias(nombre_carrera):
 
 def actualizar_lista_seleccionadas():
     # Limpiar el frame de materias seleccionadas
-    for widget in frame_materias_seleccionadas.winfo_children():
+    for widget in ventana_materias_seleccionadas.winfo_children():
         widget.destroy()
-
-    # Añadir las materias seleccionadas con un cuadro de texto para la nota
+    # Añadir las materias seleccionadas con un cuadro de texto para la nota con grid
+    column=0
+    row=0
     for materia in materias_vistas:
-        row_frame = ttk.Frame(frame_materias_seleccionadas)
-        row_frame.pack(fill='x', padx=5, pady=5)
-        tk.Label(row_frame, text=materia['nombre'], font=(
-            'Calibri', 12)).pack(side='left')
-        ttk.Label(row_frame, text=materia['nota'], font=(
-            'Calibri', 12)).pack(
-            side='right')
+        nombre=materia['nombre']
+        nota=materia['nota']
+        tk.Label(ventana_materias_seleccionadas, text=f'{nombre}:  {nota}' , font=( 'Calibri', 12)).grid(row=row, column=column, sticky='w', padx=5, pady=5)
+        row+=1
+        if row==10:
+            row=0
+            column+=1
+
+    # for materia in materias_vistas:
+    #     row_frame = ttk.Frame(ventana_materias_seleccionadas)
+    #     row_frame.pack(fill='x', padx=5, pady=5)
+    #     tk.Label(row_frame, text=materia['nombre'], font=(
+    #         'Calibri', 12)).pack(side='left')
+    #     ttk.Label(row_frame, text=materia['nota'], font=(
+    #         'Calibri', 12)).pack(
+    #         side='right')
+    # for materia in materias_vistas:
+    #     row_frame = ttk.Frame(frame_materias_seleccionadas)
+    #     row_frame.pack(fill='x', padx=5, pady=5)
+    #     tk.Label(row_frame, text=materia['nombre'], font=(
+    #         'Calibri', 12)).pack(side='left')
+    #     ttk.Label(row_frame, text=materia['nota'], font=(
+    #         'Calibri', 12)).pack(
+    #         side='right')
 
 
 # def actualizar_lista_seleccionadas():
@@ -331,9 +349,8 @@ def mostrar_calculadora_unal():
     for carrera in segundas_carreras:
         boton_carrera = ttk.Button(ventana_calculadora_unal, text=carrera , command=lambda c=carrera: calculadorUnal(c) )
         boton_carrera.pack(side='left', padx=10)
-    ttk.Label(ventana_calculadora_unal, text="Materias:",font=('Calibri', 12, 'bold')).pack()
-    for materia in materias_vistas:
-        ttk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}: {materia['nota'] or 'Sin nota'}").pack()
+    # for materia in materias_vistas:
+    #     ttk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}: {materia['nota'] or 'Sin nota'}").pack()
     #ttk.frame(materiasHomologables, text="Materias Homologables").pack()
     ttk.Label(ventana_calculadora_unal, text=f"Promedio: {promedio}",font=('Calibri', 12, 'bold')).pack()
     ttk.Label(ventana_calculadora_unal, text=f"Avance de carrera: {porcentaje_avance:.2f}%",font=('Calibri', 12, 'bold')).pack()
@@ -342,8 +359,7 @@ def mostrar_calculadora_unal():
     #mostramos las materias homologables
     def mostrarMateriasHomologables():
         for materia in materiasHomologables:
-            ttk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}",font=('Calibri', 15)).pack()
-    
+            ttk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}",font=('Calibri', 12)).pack()
     #mostrarMateriasHomologables()
         # Crear un frame para los botones de las carreras no seleccionadas
     frame_carreras_unal = ttk.Frame(ventana_calculadora_unal)
@@ -364,11 +380,24 @@ style.configure("TEntry", font=('Calibri', 12), padding=10)
 # Frame para los botones de las carreras
 frame_carreras = ttk.Frame(root)
 frame_carreras.pack(side='top', fill='x', pady=20)
+# nueva ventana para materias seleccionadas con grid
+
+
+
+ventana_materias_seleccionadas = tk.Toplevel(root, padx=250, pady=100,height=700,width=700)
+ventana_materias_seleccionadas.title("Materias Seleccionadas")
+#con scroll
+# canvas2 = tk.Canvas(ventana_materias_seleccionadas)
+# scrollbar2 = ttk.Scrollbar(ventana_materias_seleccionadas, orient='vertical', command=canvas2.yview)
+# canvas2.configure(yscrollcommand=scrollbar2.set)
+# # Empaquetar la scrollbar y el canvas para las materias
+# scrollbar2.pack(side='right', fill='y')
+# canvas2.pack(side='left', fill='both', expand=True)
+
 # Crear un canvas y una scrollbar para las materias
 canvas = tk.Canvas(root)
 scrollbar = ttk.Scrollbar(root, orient='vertical', command=canvas.yview)
 canvas.configure(yscrollcommand=scrollbar.set)
-
 # Empaquetar la scrollbar y el canvas para las materias
 scrollbar.pack(side='right', fill='y')
 canvas.pack(side='left', fill='both', expand=True)
