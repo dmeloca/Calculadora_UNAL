@@ -222,16 +222,18 @@ def actualizar_creditos_adicionales(carrera):
 def calcular_promedio():
     global promedio
     total_notas = 0
-    cantidad_materias = 0
+    cantidad_creditos = 0
     for materia in materias_vistas:
         try:
             nota = float(materia['nota'])
-            total_notas += nota
-            cantidad_materias += 1
+            creditos=float(materia['creditos'])
+            total_notas += nota*creditos
+            cantidad_creditos+=creditos
         except ValueError:
             pass  # Ignorar si no es un número
-    if cantidad_materias > 0:
-        promedio = total_notas / cantidad_materias
+    if cantidad_creditos > 0:
+        
+        promedio = total_notas / cantidad_creditos#arreglar
         lbl_promedio.config(text=f"Promedio: {promedio:.2f}")
     else:
         lbl_promedio.config(
@@ -302,9 +304,9 @@ def mostrar_calculadora_unal():
 
     def calculadorUnal(nombreSegundaCarrera):
         creditosNecesariosV=materiasHomologablesfuncion(nombreSegundaCarrera)
-        tk.Label(ventana_calculadora_unal, text=f"creditos Necesarios: {creditosNecesariosV}" ).pack()
+        tk.Label(ventana_calculadora_unal, text=f"creditos Necesarios: {creditosNecesariosV}",font=('Calibri', 12, 'bold') ).pack()
         print('creditos necesarios',creditosNecesariosV)
-        tk.Label(ventana_calculadora_unal, text=f"creditos Adicionales: {creditos_adicionales}" ).pack()
+        tk.Label(ventana_calculadora_unal, text=f"creditos Adicionales: {creditos_adicionales}",font=('Calibri', 12, 'bold') ).pack()
         mensaje=doble_titulacion(promedio, porcentaje_avance, creditosNecesariosV, creditos_adicionales)
         mostrarMensaje(mensaje)
     def mostrarMensaje(mensaje):
@@ -329,19 +331,18 @@ def mostrar_calculadora_unal():
     for carrera in segundas_carreras:
         boton_carrera = ttk.Button(ventana_calculadora_unal, text=carrera , command=lambda c=carrera: calculadorUnal(c) )
         boton_carrera.pack(side='left', padx=10)
-    ttk.Label(ventana_calculadora_unal, text="Materias:").pack()
+    ttk.Label(ventana_calculadora_unal, text="Materias:",font=('Calibri', 12, 'bold')).pack()
     for materia in materias_vistas:
         ttk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}: {materia['nota'] or 'Sin nota'}").pack()
     #ttk.frame(materiasHomologables, text="Materias Homologables").pack()
-    ttk.Label(ventana_calculadora_unal, text=f"Promedio: {promedio}").pack()
-    ttk.Label(ventana_calculadora_unal, text=f"Avance de carrera: {porcentaje_avance:.2f}%").pack()
-    ttk.Label(ventana_calculadora_unal, text=f"Créditos adicionales: {creditos_adicionales}").pack()
-    ttk.Label(ventana_calculadora_unal, text="Materias homologables:").pack()
-
+    ttk.Label(ventana_calculadora_unal, text=f"Promedio: {promedio}",font=('Calibri', 12, 'bold')).pack()
+    ttk.Label(ventana_calculadora_unal, text=f"Avance de carrera: {porcentaje_avance:.2f}%",font=('Calibri', 12, 'bold')).pack()
+    ttk.Label(ventana_calculadora_unal, text=f"Créditos adicionales: {creditos_adicionales}",font=('Calibri', 12, 'bold')).pack()
+    ttk.Label(ventana_calculadora_unal, text="Materias homologables:",font=('Calibri', 12, 'bold')).pack()
     #mostramos las materias homologables
     def mostrarMateriasHomologables():
         for materia in materiasHomologables:
-            tk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}").pack()
+            ttk.Label(ventana_calculadora_unal, text=f"{materia['nombre']}",font=('Calibri', 15)).pack()
     
     #mostrarMateriasHomologables()
         # Crear un frame para los botones de las carreras no seleccionadas
