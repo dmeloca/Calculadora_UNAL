@@ -1,4 +1,5 @@
-# Este es un proyecto para hacer el cálculo de los requisitos necesarios para la doble titulación en la Universidad Nacional de Colombia.
+#Calculadora UNAL
+### Este es un proyecto para hacer el cálculo de los requisitos necesarios para la doble titulación en la Universidad Nacional de Colombia.
 
 ## Proceso
 ### 1. Aplicación para consola
