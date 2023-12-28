@@ -1,4 +1,4 @@
-#Este es un proyecto para hacer el cálculo de los requisitos necesarios para la doble titulación en la Universidad Nacional de Colombia.
+# Este es un proyecto para hacer el cálculo de los requisitos necesarios para la doble titulación en la Universidad Nacional de Colombia.
 
 ____
 ## Proceso
