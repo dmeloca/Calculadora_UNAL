@@ -14,9 +14,10 @@ def extract_line(pdf_path, pageIndex ,line):
 
 if __name__ == "__main__":
     pdf_path = str(input("[?] Ingrese la ruta del archivo pdf: "))
-    userName = extract_line(pdf_path, 0, 0)
-    userStudyPlan = extract_line(pdf_path, 0, 14).replace("Plan de estudios ", "")
-    papa = extract_line(pdf_path, 0, 18)
-    print(f"[!] Bienvenido, {userName}")
-    print(f"[!] Su Plan de estudios es: {userStudyPlan}")
-    print(f"[!] Su P.A.P.A es: {papa}")
+    userData = {'name': extract_line(pdf_path, 0, 0),
+                'studyPlan': extract_line(pdf_path, 0, 14).replace("Plan de estudios ", ""),
+                'papa': extract_line(pdf_path, 0, 18) }
+    print(f"[!] Bienvenido, {userData['name']}")
+    print(f"[!] Su Plan de estudios es: {userData['studyPlan']}")
+    print(f"[!] Su P.A.P.A es: {userData['papa']}")
+    print(userData)
