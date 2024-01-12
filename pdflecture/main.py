@@ -1,17 +1,22 @@
 import fitz  
 
-def extract_text_from_pdf(pdf_path):
+def extract_line(pdf_path, pageIndex ,line):
     doc = fitz.open(pdf_path)  # Open the PDF document
-    text = ""
-    counter = 1
-    for page_number in range(doc.page_count):
-        page = doc[page_number]
-        text += str(counter) + page.get_text()
-        counter += 1
-    doc.close()  # Close the PDF document
-    return text
+    try:
+        page = doc[pageIndex]  # Assuming you want to extract text from the second page (index 1)
+        extractedText = page.get_text("text").split('\n')[line]  # Extract the first line
+        return extractedText
+    except IndexError:
+        return "Error: The document may not have a second page."
+
+    finally:
+        doc.close()  # Close the PDF document
 
 if __name__ == "__main__":
-    pdf_path = str(input("[?]Ingrese la ruta del archivo pdf: "))
-    extracted_text = extract_text_from_pdf(pdf_path)
-    print(extracted_text)
+    pdf_path = str(input("[?] Ingrese la ruta del archivo pdf: "))
+    userName = extract_line(pdf_path, 0, 0)
+    userStudyPlan = extract_line(pdf_path, 0, 14).replace("Plan de estudios ", "")
+    papa = extract_line(pdf_path, 0, 18)
+    print(f"[!] Bienvenido, {userName}")
+    print(f"[!] Su Plan de estudios es: {userStudyPlan}")
+    print(f"[!] Su P.A.P.A es: {papa}")
