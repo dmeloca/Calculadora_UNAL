@@ -12,6 +12,6 @@ def extract_text_from_pdf(pdf_path):
     return text
 
 if __name__ == "__main__":
-    pdf_path = "sia.pdf"
+    pdf_path = str(input("[?]Ingrese la ruta del archivo pdf: "))
     extracted_text = extract_text_from_pdf(pdf_path)
     print(extracted_text)
